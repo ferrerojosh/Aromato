@@ -24,39 +24,34 @@ namespace Aromato.Test.Application.Test
             var gender = Gender.Male;
             var dateOfBirth = DateTime.Parse("02/09/1996");
 
-            using (var context = new AromatoContext())
+            using (var unitOfWork = new EfUnitOfWork())
             {
-                using (var unitOfWork = new EfUnitOfWork(context))
-                {
-                    var employeeRepository = new EfEmployeeRepository(unitOfWork);
-                    var employeeService = new EmployeeService(employeeRepository, unitOfWork);
+                var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeService = new EmployeeService(employeeRepository, unitOfWork);
 
-                    employeeService.CreateEmployee(firstName, lastName, middleName, gender, dateOfBirth);
-                }
+                employeeService.CreateEmployee(firstName, lastName, middleName, gender, dateOfBirth);
             }
 
-            using (var context = new AromatoContext())
+            using (var unitOfWork = new EfUnitOfWork())
             {
-                using (var unitOfWork = new EfUnitOfWork(context))
-                {
-                    var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeRepository = new EfEmployeeRepository(unitOfWork);
 
-                    var employees = employeeRepository.FindAll();
+                var employees = employeeRepository.FindAll();
 
-                    var employee = employees.First();
+                var employee = employees.First();
 
-                    Assert.Equal(firstName, employee.FirstName);
-                    Assert.Equal(middleName, employee.MiddleName);
-                    Assert.Equal(lastName, employee.LastName);
-                    Assert.Equal(gender, employee.Gender);
-                    Assert.Equal(dateOfBirth, employee.DateOfBirth);
+                Assert.Equal(firstName, employee.FirstName);
+                Assert.Equal(middleName, employee.MiddleName);
+                Assert.Equal(lastName, employee.LastName);
+                Assert.Equal(gender, employee.Gender);
+                Assert.Equal(dateOfBirth, employee.DateOfBirth);
 
-                    employeeRepository.Remove(employee);
-                    unitOfWork.Commit();
+                employeeRepository.Remove(employee);
+                unitOfWork.Commit();
 
-                    Assert.Equal(EntityState.Deleted, unitOfWork.Context.Entry(employee).State);
-                }
+                Assert.Equal(EntityState.Deleted, unitOfWork.Context.Entry(employee).State);
             }
+
         }
     }
 }

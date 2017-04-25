@@ -1,6 +1,5 @@
 ﻿using System;
 using Aromato.Domain;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Aromato.Infrastructure
@@ -11,10 +10,10 @@ namespace Aromato.Infrastructure
 
         public AromatoContext Context { get; }
 
-        public EfUnitOfWork(AromatoContext context)
+        public EfUnitOfWork()
         {
-            Context = context;
-            _transaction = context.Database.BeginTransaction();
+            Context = new AromatoContext();
+            _transaction = Context.Database.BeginTransaction();
         }
 
         public void Commit()
@@ -30,6 +29,7 @@ namespace Aromato.Infrastructure
         public void Dispose()
         {
             _transaction?.Dispose();
+            Context?.Dispose();
         }
     }
 }

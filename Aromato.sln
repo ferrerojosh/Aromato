@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7CB5EAA7-6A21-48DD-995E-8C8BEBBEEC10}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4003AC6C-E0EA-4A4B-BA4A-35BEAE8EDAC3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aromato", "src\Aromato\Aromato.csproj", "{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aromato.Test", "tests\Aromato.Test\Aromato.Test.csproj", "{6D797AB7-6BDA-484B-9E08-855F920505FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Debug|x64.Build.0 = Debug|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Debug|x86.Build.0 = Debug|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Release|x64.ActiveCfg = Release|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Release|x64.Build.0 = Release|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Release|x86.ActiveCfg = Release|Any CPU
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A}.Release|x86.Build.0 = Release|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Debug|x64.Build.0 = Debug|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Debug|x86.Build.0 = Debug|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Release|x64.ActiveCfg = Release|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Release|x64.Build.0 = Release|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Release|x86.ActiveCfg = Release|Any CPU
+		{6D797AB7-6BDA-484B-9E08-855F920505FC}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FE18CD29-ACC5-454A-AC1F-436C2FA91A8A} = {7CB5EAA7-6A21-48DD-995E-8C8BEBBEEC10}
+		{6D797AB7-6BDA-484B-9E08-855F920505FC} = {4003AC6C-E0EA-4A4B-BA4A-35BEAE8EDAC3}
+	EndGlobalSection
+EndGlobal

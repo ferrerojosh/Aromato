@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Aromato.Domain
 {
-    interface IAggregateRoot
+    public interface IAggregateRoot : IEntity
     {
+
     }
 }

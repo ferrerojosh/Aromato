@@ -1,12 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Folder Include="Application\" />
     <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Repository" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="System.Diagnostics.Contracts">
+      <Version>4.3.0</Version>
+    </PackageReference>
+  </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@ namespace Aromato.Test.Application.Test
             using (var unitOfWork = new EfUnitOfWork())
             {
                 var employeeRepository = new EfEmployeeRepository(unitOfWork);
-                var employeeService = new EmployeeService(employeeRepository, unitOfWork);
+                var employeeService = new EmployeeService(employeeRepository);
 
                 employeeService.CreateEmployee(firstName, lastName, middleName, gender, dateOfBirth);
             }
@@ -47,9 +47,12 @@ namespace Aromato.Test.Application.Test
                 Assert.Equal(dateOfBirth, employee.DateOfBirth);
 
                 employeeRepository.Remove(employee);
-                unitOfWork.Commit();
 
                 Assert.Equal(EntityState.Deleted, unitOfWork.Context.Entry(employee).State);
+
+                employeeRepository.SaveChanges();
+                
+                Assert.Equal(EntityState.Detached, unitOfWork.Context.Entry(employee).State);
             }
 
         }

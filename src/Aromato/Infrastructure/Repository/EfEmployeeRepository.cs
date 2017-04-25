@@ -45,6 +45,7 @@ namespace Aromato.Infrastructure.Repository
         public void SaveChanges()
         {
             _unitOfWork.Context.SaveChanges();
+            _unitOfWork.Commit();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Aromato.Domain;
 using Aromato.Domain.Aggregate;
 using Aromato.Domain.Enumeration;
 using Aromato.Domain.Repository;
@@ -9,18 +8,16 @@ namespace Aromato.Application.Service
     public class EmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IUnitOfWork unitOfWork)
+        public EmployeeService(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public void RemoveEmployee(Employee employee)
         {
             _employeeRepository.Remove(employee);
-            _unitOfWork.Commit();
+            _employeeRepository.SaveChanges();
         }
 
         public void CreateEmployee(string firstName, string lastName, string middleName, Gender gender, DateTime dateOfBirth)
@@ -29,7 +26,6 @@ namespace Aromato.Application.Service
 
             _employeeRepository.Add(employee);
             _employeeRepository.SaveChanges();
-            _unitOfWork.Commit();
         }
     }
 }

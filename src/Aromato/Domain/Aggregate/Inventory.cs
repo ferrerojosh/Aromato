@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using Aromato.Domain.Entity;
 
 namespace Aromato.Domain.Aggregate
@@ -10,7 +10,7 @@ namespace Aromato.Domain.Aggregate
 
         public string Name { get; protected set; }
         public DateTime LastUpdated { get; protected set; }
-        public IList Items { get; protected set; }
+        public IList<Item> Items { get; protected set; }
 
         public void AddItem(Item item)
         {

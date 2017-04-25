@@ -9,6 +9,12 @@ namespace Aromato.Domain.Aggregate
 {
     public class Employee : IAggregateRoot
     {
+
+        protected Employee()
+        {
+            // required for Entity Framework
+        }
+
         public Employee(string firstName, string lastName, string middleName, Gender gender, DateTime dateOfBirth)
         {
             Contract.Requires(dateOfBirth.Year < DateTime.Now.Year);

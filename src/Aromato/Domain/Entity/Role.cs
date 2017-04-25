@@ -6,6 +6,11 @@ namespace Aromato.Domain.Entity
 {
     public class Role : IEntity
     {
+        protected Role()
+        {
+            // required for Entity Framework
+        }
+
         public Guid Id { get; set; }
 
         public string Name { get; protected set; }

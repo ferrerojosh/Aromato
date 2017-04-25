@@ -6,6 +6,12 @@ namespace Aromato.Domain.Aggregate
 {
     public class Inventory : IAggregateRoot
     {
+        protected Inventory()
+        {
+            // required for Entity Framework
+        }
+
+
         public Guid Id { get; set; }
 
         public string Name { get; protected set; }

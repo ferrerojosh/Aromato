@@ -1,13 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <Folder Include="Application.Test\" />
-    <Folder Include="Domain.Test\" />
-    <Folder Include="Infrastructure.Test\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore">
+      <Version>1.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
+      <Version>1.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="Domain.Test" />
+    <Folder Include="Infrastructure.Test" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Aromato, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\src\Aromato\bin\Debug\netstandard1.4\Aromato.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
 </Project>

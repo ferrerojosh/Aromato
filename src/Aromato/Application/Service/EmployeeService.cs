@@ -28,6 +28,7 @@ namespace Aromato.Application.Service
             var employee = new Employee(firstName, lastName, middleName, gender, dateOfBirth);
 
             _employeeRepository.Add(employee);
+            _employeeRepository.SaveChanges();
             _unitOfWork.Commit();
         }
     }

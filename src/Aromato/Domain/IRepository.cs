@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Aromato.Domain
 {
@@ -6,8 +7,10 @@ namespace Aromato.Domain
         where TEntity : IAggregateRoot
     {
         TEntity FindById(Guid id);
+        IEnumerable<TEntity> FindAll();
         void Add(TEntity entity);
         void Modify(TEntity entity);
         void Remove(TEntity entity);
+        void SaveChanges();
     }
 }

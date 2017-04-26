@@ -13,7 +13,7 @@ namespace Aromato.Test.Application
     {
 
         [Fact]
-        public void CanCreateEmployee()
+        public void CanCreateAndRemoveEmployee()
         {
             var firstName = "John Joshua";
             var middleName = "Remonde";

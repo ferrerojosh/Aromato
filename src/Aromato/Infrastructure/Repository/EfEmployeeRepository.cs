@@ -24,7 +24,10 @@ namespace Aromato.Infrastructure.Repository
 
         public IEnumerable<Employee> FindAll()
         {
-            return _unitOfWork.Employees.ToList();
+            return _unitOfWork.Employees
+                .Include(e => e.Roles)
+                .Include(e => e.Punches)
+                .ToList();
         }
 
         public void Add(Employee entity)

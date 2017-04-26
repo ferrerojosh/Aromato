@@ -5,6 +5,11 @@ namespace Aromato.Domain.Entity
 {
     public class Punch : IEntity
     {
+        protected Punch()
+        {
+            // Required by Entity Framework
+        }
+
         public Punch(PunchType punchType)
         {
             Type = punchType;

@@ -13,6 +13,11 @@ namespace Aromato.Domain.Aggregate
 
         public Inventory(string name)
         {
+            if (name.Length <= 0)
+            {
+                throw new ArgumentException("the inventory must have a name!");
+            }
+
             Name = name;
             LastUpdated = DateTime.Now;
             Items = new List<Item>();

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-using Aromato.Domain;
+﻿using Aromato.Domain;
 using Aromato.Domain.Aggregate;
 using Aromato.Domain.Entity;
 using Aromato.Domain.Repository;
@@ -8,8 +7,8 @@ namespace Aromato.Application.Service
 {
     public class InventoryService
     {
-        private IInventoryRepository _inventoryRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public InventoryService(IInventoryRepository inventoryRepository, IUnitOfWork unitOfWork)
         {
@@ -27,9 +26,6 @@ namespace Aromato.Application.Service
         public void AddItemToInventory(string inventoryName, Item item)
         {
             var inventory = _inventoryRepository.FindByName(inventoryName);
-
-            Contract.Requires(inventory != null, "inventory does not exist");
-
             inventory.AddItem(item);
             _unitOfWork.Commit();
         }

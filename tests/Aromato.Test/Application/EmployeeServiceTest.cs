@@ -7,7 +7,7 @@ using Aromato.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Aromato.Test.Application.Test
+namespace Aromato.Test.Application
 {
     public class EmployeeServiceTest
     {

@@ -12,10 +12,6 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain.Test" />
-    <Folder Include="Infrastructure.Test" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Aromato\Aromato.csproj" />
   </ItemGroup>
   <ItemGroup>

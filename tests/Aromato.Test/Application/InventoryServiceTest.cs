@@ -6,7 +6,7 @@ using Aromato.Infrastructure.Repository;
 using Aromato.Test.Order;
 using Xunit;
 
-namespace Aromato.Test.Application.Test
+namespace Aromato.Test.Application
 {
     [TestCaseOrderer("Aromato.Test.Order.PriorityOrderer", "Aromato.Application.Test")]
     public class InventoryServiceTest

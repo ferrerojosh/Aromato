@@ -19,32 +19,31 @@ namespace Aromato.Infrastructure.Repository
 
         public Employee FindById(Guid id)
         {
-            return _unitOfWork.Context.Employees.Find(id);
+            return _unitOfWork.Employees.Find(id);
         }
 
         public IEnumerable<Employee> FindAll()
         {
-            return _unitOfWork.Context.Employees.ToList();
+            return _unitOfWork.Employees.ToList();
         }
 
         public void Add(Employee entity)
         {
-            _unitOfWork.Context.Employees.Add(entity);
+            _unitOfWork.Employees.Add(entity);
         }
 
         public void Modify(Employee entity)
         {
-            _unitOfWork.Context.Entry(entity).State = EntityState.Modified;
+            _unitOfWork.Entry(entity).State = EntityState.Modified;
         }
 
         public void Remove(Employee entity)
         {
-            _unitOfWork.Context.Employees.Remove(entity);
+            _unitOfWork.Employees.Remove(entity);
         }
 
         public void SaveChanges()
         {
-            _unitOfWork.Context.SaveChanges();
             _unitOfWork.Commit();
         }
     }

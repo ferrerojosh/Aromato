@@ -1,35 +1,28 @@
 ﻿using System;
 using Aromato.Domain;
-using Microsoft.EntityFrameworkCore.Storage;
+using Aromato.Domain.Aggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Infrastructure
 {
-    public class EfUnitOfWork : IUnitOfWork, IDisposable
+    public class EfUnitOfWork : DbContext, IUnitOfWork
     {
-        private readonly IDbContextTransaction _transaction;
-
-        public AromatoContext Context { get; }
-
-        public EfUnitOfWork()
-        {
-            Context = new AromatoContext();
-            _transaction = Context.Database.BeginTransaction();
-        }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
 
         public void Commit()
         {
-            _transaction.Commit();
+            this.SaveChanges();
         }
 
         public void Rollback()
         {
-            _transaction.Rollback();
+            this.Dispose();
         }
 
-        public void Dispose()
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            _transaction?.Dispose();
-            Context?.Dispose();
+            optionsBuilder.UseInMemoryDatabase("aromato");
         }
     }
 }

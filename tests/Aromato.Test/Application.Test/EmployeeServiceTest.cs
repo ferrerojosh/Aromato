@@ -48,11 +48,11 @@ namespace Aromato.Test.Application.Test
 
                 employeeRepository.Remove(employee);
 
-                Assert.Equal(EntityState.Deleted, unitOfWork.Context.Entry(employee).State);
+                Assert.Equal(EntityState.Deleted, unitOfWork.Entry(employee).State);
 
                 employeeRepository.SaveChanges();
                 
-                Assert.Equal(EntityState.Detached, unitOfWork.Context.Entry(employee).State);
+                Assert.Equal(EntityState.Detached, unitOfWork.Entry(employee).State);
             }
 
         }

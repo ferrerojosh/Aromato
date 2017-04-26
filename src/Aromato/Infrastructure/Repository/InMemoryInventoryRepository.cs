@@ -16,7 +16,7 @@ namespace Aromato.Infrastructure.Repository
             _unitOfWork = unitOfWork;
         }
 
-        public Inventory FindById(Guid id)
+        public Inventory FindById(long id)
         {
             return _unitOfWork.Inventories.Find(id);
         }

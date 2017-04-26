@@ -17,7 +17,7 @@ namespace Aromato.Infrastructure.Repository
             _unitOfWork = unitOfWork;
         }
 
-        public Employee FindById(Guid id)
+        public Employee FindById(long id)
         {
             return _unitOfWork.Employees.Find(id);
         }

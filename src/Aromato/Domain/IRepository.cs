@@ -11,6 +11,5 @@ namespace Aromato.Domain
         void Add(TEntity entity);
         void Modify(TEntity entity);
         void Remove(TEntity entity);
-        void SaveChanges();
     }
 }

@@ -11,6 +11,12 @@ namespace Aromato.Domain.Aggregate
             // required for Entity Framework
         }
 
+        public Inventory(string name)
+        {
+            Name = name;
+            LastUpdated = DateTime.Now;
+            Items = new List<Item>();
+        }
 
         public Guid Id { get; set; }
 

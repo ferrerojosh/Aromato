@@ -42,9 +42,5 @@ namespace Aromato.Infrastructure.Repository
             _unitOfWork.Employees.Remove(entity);
         }
 
-        public void SaveChanges()
-        {
-            _unitOfWork.Commit();
-        }
     }
 }

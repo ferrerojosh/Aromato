@@ -1,6 +1,7 @@
 ﻿using System;
 using Aromato.Domain;
 using Aromato.Domain.Aggregate;
+using Aromato.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Infrastructure
@@ -9,15 +10,16 @@ namespace Aromato.Infrastructure
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Item> Items { get; set; }
 
         public void Commit()
         {
-            this.SaveChanges();
+            SaveChanges();
         }
 
         public void Rollback()
         {
-            this.Dispose();
+            Dispose();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

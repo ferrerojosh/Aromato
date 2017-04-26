@@ -7,9 +7,18 @@ namespace Aromato.Domain.Entity
     {
         public Guid Id { get; set; }
 
-        public Item()
+        protected Item()
         {
+            // required for Entity Framework
+        }
+
+        public Item(string uniqueId, string name, string description)
+        {
+            UniqueId = uniqueId;
+            Name = name;
+            Description = description;
             DateAdded = DateTime.Now;
+            Status = ItemStatus.Available;
         }
 
         public string UniqueId { get; protected set; }

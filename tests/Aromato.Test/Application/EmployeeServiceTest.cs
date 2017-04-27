@@ -21,17 +21,17 @@ namespace Aromato.Test.Application
             var gender = Gender.Male;
             var dateOfBirth = DateTime.Parse("02/09/1996");
 
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
                 var employeeService = new EmployeeService(employeeRepository, unitOfWork);
 
                 employeeService.CreateEmployee(firstName, lastName, middleName, gender, dateOfBirth);
             }
 
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
 
                 var employees = employeeRepository.FindAll();
 

@@ -18,11 +18,11 @@ namespace Aromato.Api.Controllers
     {
 
         [HttpGet("{id}")]
-        public Domain.Aggregate.Employee Get(Guid id)
+        public Domain.Aggregate.Employee Get(long id)
         {
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
 
                 return employeeRepository.FindById(id);
             }
@@ -31,21 +31,21 @@ namespace Aromato.Api.Controllers
         [HttpGet]
         public IEnumerable<Domain.Aggregate.Employee> Get()
         {
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
 
                 return employeeRepository.FindAll();
             }
         }
 
         [HttpPut("{id}/email")]
-        public void Put(Guid id, [FromBody] dynamic data)
+        public void Put(long id, [FromBody] dynamic data)
         {
             string email = data.email;
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
                 var employee = employeeRepository.FindById(id);
 
                 employee.ChangeEmail(email);
@@ -66,9 +66,9 @@ namespace Aromato.Api.Controllers
             var dateOfBirth = DateTime.Parse(dateOfBirthStr);
             var gender = (Gender)Enum.Parse(typeof(Gender), genderStr);
 
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var employeeRepository = new EfEmployeeRepository(unitOfWork);
+                var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
                 var employeeService = new EmployeeService(employeeRepository, unitOfWork);
 
                 employeeService.CreateEmployee(firstName, lastName, middleName, gender, dateOfBirth);

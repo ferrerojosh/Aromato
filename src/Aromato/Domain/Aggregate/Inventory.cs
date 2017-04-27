@@ -8,7 +8,7 @@ namespace Aromato.Domain.Aggregate
     {
         protected Inventory()
         {
-            // required for Entity Framework
+            // Required for Entity Framework
         }
 
         public Inventory(string name)
@@ -23,7 +23,7 @@ namespace Aromato.Domain.Aggregate
             Items = new List<Item>();
         }
 
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; protected set; }
         public DateTime LastUpdated { get; protected set; }

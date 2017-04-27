@@ -7,7 +7,7 @@ namespace Aromato.Domain.Entity
     {
         protected Punch()
         {
-            // Required by Entity Framework
+            // Required for Entity Framework
         }
 
         public Punch(PunchType punchType)
@@ -16,7 +16,7 @@ namespace Aromato.Domain.Entity
             DateTime = DateTime.Now;
         }
 
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         public PunchType Type { get; protected set; }
         public DateTime DateTime { get; protected set; }

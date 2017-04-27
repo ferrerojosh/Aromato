@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Aromato.Domain.Aggregate;
 using Aromato.Domain.Repository;
@@ -7,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Infrastructure.Repository
 {
-    public class EfInventoryRepository : IInventoryRepository
+    public class InMemoryInventoryRepository : IInventoryRepository
     {
-        private readonly EfUnitOfWork _unitOfWork;
+        private readonly InMemoryUnitOfWork _unitOfWork;
 
-        public EfInventoryRepository(EfUnitOfWork unitOfWork)
+        public InMemoryInventoryRepository(InMemoryUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

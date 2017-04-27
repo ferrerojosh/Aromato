@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Infrastructure
 {
-    public class EfUnitOfWork : DbContext, IUnitOfWork
+    public class InMemoryUnitOfWork : DbContext, IUnitOfWork
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Inventory> Inventories { get; set; }

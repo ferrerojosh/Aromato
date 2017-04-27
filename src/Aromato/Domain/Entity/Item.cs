@@ -5,11 +5,11 @@ namespace Aromato.Domain.Entity
 {
     public class Item : IEntity
     {
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         protected Item()
         {
-            // required for Entity Framework
+            // Required for Entity Framework
         }
 
         public Item(string uniqueId, string name, string description)

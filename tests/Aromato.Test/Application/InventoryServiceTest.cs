@@ -16,9 +16,9 @@ namespace Aromato.Test.Application
         {
             var inventoryName = "Instruments";
 
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var inventoryRepository = new EfInventoryRepository(unitOfWork);
+                var inventoryRepository = new InMemoryInventoryRepository(unitOfWork);
                 var inventoryService = new InventoryService(inventoryRepository, unitOfWork);
 
                 inventoryService.CreateInventory(inventoryName);
@@ -38,9 +38,9 @@ namespace Aromato.Test.Application
             var itemName = "Trainer";
             var itemDescription = "Hardware stuff";
 
-            using (var unitOfWork = new EfUnitOfWork())
+            using (var unitOfWork = new InMemoryUnitOfWork())
             {
-                var inventoryRepository = new EfInventoryRepository(unitOfWork);
+                var inventoryRepository = new InMemoryInventoryRepository(unitOfWork);
                 var inventoryService = new InventoryService(inventoryRepository, unitOfWork);
 
                 var item = new Item(itemUniqueId, itemName, itemDescription);

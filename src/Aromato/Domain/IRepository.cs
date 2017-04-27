@@ -6,7 +6,7 @@ namespace Aromato.Domain
     public interface IRepository<TEntity>
         where TEntity : IAggregateRoot
     {
-        TEntity FindById(Guid id);
+        TEntity FindById(long id);
         IEnumerable<TEntity> FindAll();
         void Add(TEntity entity);
         void Modify(TEntity entity);

@@ -12,7 +12,7 @@ namespace Aromato.Domain.Aggregate
 
         protected Employee()
         {
-            // required for Entity Framework
+            // Required for Entity Framework
         }
 
         public Employee(string firstName, string lastName, string middleName, Gender gender, DateTime dateOfBirth)
@@ -32,7 +32,7 @@ namespace Aromato.Domain.Aggregate
             Punches = new List<Punch>();
         }
 
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }

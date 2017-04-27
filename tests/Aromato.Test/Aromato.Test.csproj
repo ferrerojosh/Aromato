@@ -3,6 +3,14 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Domain\**" />
+    <Compile Remove="Order\**" />
+    <EmbeddedResource Remove="Domain\**" />
+    <EmbeddedResource Remove="Order\**" />
+    <None Remove="Domain\**" />
+    <None Remove="Order\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
       <Version>1.1.1</Version>
     </PackageReference>

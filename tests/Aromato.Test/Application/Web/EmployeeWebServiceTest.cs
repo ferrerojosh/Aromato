@@ -1,0 +1,44 @@
+﻿using System.Linq;
+using Aromato.Application.Web;
+using Aromato.Application.Web.Data;
+using Aromato.Test.Infrastructure;
+using Xunit;
+
+namespace Aromato.Test.Application.Web
+{
+    public class EmployeeWebServiceTest
+    {
+        [Fact]
+        public void CanCreateEmployee()
+        {
+            var firstName = "Employee";
+            var lastName = "Sweat";
+            var middleName = "Super";
+            var gender = "Male";
+            var dateOfBirth = "02/02/1990";
+            var email = "hello@live.com";
+            var contactNo = "0922222222222";
+
+            using (var unitOfWork = new InMemoryUnitOfWork())
+            {
+                var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
+                var employeeService = new EmployeeWebService(employeeRepository);
+
+                var employeeWebData = new EmployeeWebData(firstName, lastName, middleName, gender,
+                dateOfBirth, email, contactNo);
+
+                employeeService.CreateEmployee(employeeWebData);
+
+                var retrieveWebData = (EmployeeWebData) employeeService.RetrieveAll().First();
+
+                Assert.Equal(firstName, retrieveWebData.FirstName);
+                Assert.Equal(lastName, retrieveWebData.LastName);
+                Assert.Equal(middleName, retrieveWebData.MiddleName);
+                Assert.Equal(gender, retrieveWebData.Gender);
+                Assert.Equal(dateOfBirth, retrieveWebData.DateOfBirth);
+                Assert.Equal(email, retrieveWebData.Email);
+                Assert.Equal(contactNo, retrieveWebData.ContactNo);
+            }
+        }
+    }
+}

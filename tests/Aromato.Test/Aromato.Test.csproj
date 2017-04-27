@@ -3,6 +3,14 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Domain\**" />
+    <Compile Remove="Order\**" />
+    <EmbeddedResource Remove="Domain\**" />
+    <EmbeddedResource Remove="Order\**" />
+    <None Remove="Domain\**" />
+    <None Remove="Order\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
       <Version>1.1.1</Version>
     </PackageReference>
@@ -12,13 +20,13 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Aromato\Aromato.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Web" />
     <Folder Include="Infrastructure" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Aromato\Aromato.csproj" />
   </ItemGroup>
 </Project>

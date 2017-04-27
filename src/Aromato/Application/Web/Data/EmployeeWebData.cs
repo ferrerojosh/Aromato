@@ -41,7 +41,7 @@ namespace Aromato.Application.Web.Data
             ContactNo = entity.ContactNo;
             Email = entity.Email;
             Gender = entity.Gender.ToString();
-            DateOfBirth = entity.DateOfBirth.ToString("d");
+            DateOfBirth = entity.DateOfBirth.ToString("MM/dd/yyyy");
             return this;
         }
     }

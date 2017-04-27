@@ -6,28 +6,8 @@
     <DefineConstants>TRACE;DEBUG;NETCOREAPP1_1</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Application\Service\**" />
-    <Compile Remove="Domain\Enumeration\**" />
-    <Compile Remove="Domain\Helper\**" />
-    <Compile Remove="Domain\Repository\**" />
-    <Compile Remove="Infrastructure\Repository\**" />
-    <EmbeddedResource Remove="Application\Service\**" />
-    <EmbeddedResource Remove="Domain\Enumeration\**" />
-    <EmbeddedResource Remove="Domain\Helper\**" />
-    <EmbeddedResource Remove="Domain\Repository\**" />
-    <EmbeddedResource Remove="Infrastructure\Repository\**" />
-    <None Remove="Application\Service\**" />
-    <None Remove="Domain\Enumeration\**" />
-    <None Remove="Domain\Helper\**" />
-    <None Remove="Domain\Repository\**" />
-    <None Remove="Infrastructure\Repository\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
       <Version>1.1.1</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure" />
   </ItemGroup>
 </Project>

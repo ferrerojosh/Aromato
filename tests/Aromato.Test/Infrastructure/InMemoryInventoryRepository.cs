@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Aromato.Domain;
 using Aromato.Domain.Inventory;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Test.Infrastructure
 {
@@ -19,39 +21,45 @@ namespace Aromato.Test.Infrastructure
 
         public Inventory FindById(long id)
         {
-            throw new System.NotImplementedException();
+            return _unitOfWork.Inventories.Find(id);
         }
 
         public IEnumerable<Inventory> FindAll()
         {
-            throw new System.NotImplementedException();
+            return _unitOfWork.Inventories.AsEnumerable();
         }
 
         public IEnumerable<Inventory> FindBySpec(ISpecification<long, Inventory> specification)
         {
-            throw new System.NotImplementedException();
+            return _unitOfWork.Inventories
+                .Where(specification.IsSatisified)
+                .AsEnumerable();
         }
 
         public void Add(Inventory aggregate)
         {
-            throw new System.NotImplementedException();
+            _unitOfWork.Inventories.Add(aggregate);
         }
 
         public void Modify(Inventory aggregate)
         {
-            throw new System.NotImplementedException();
+            _unitOfWork.Entry(aggregate).State = EntityState.Modified;
         }
 
         public void Remove(Inventory aggregate)
         {
-            throw new System.NotImplementedException();
+            _unitOfWork.Inventories.Remove(aggregate);
         }
 
         public void RemoveById(long id)
         {
-            throw new System.NotImplementedException();
+            Remove(FindById(id));
         }
 
         public IUnitOfWork UnitOfWork => _unitOfWork;
+        public Inventory FindByName(string name)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

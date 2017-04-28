@@ -6,7 +6,7 @@ using Aromato.Domain.Employee;
 
 namespace Aromato.Application.Web
 {
-    public class EmployeeWebService : IEmployeeService<long, EmployeeWebData, Employee>
+    public class EmployeeWebService : IEmployeeService<long, Employee>
     {
         private readonly IEmployeeRepository _employeeRepository;
 
@@ -27,17 +27,22 @@ namespace Aromato.Application.Web
             return employees.Select(employee => new EmployeeWebData().Fill(employee));
         }
 
-        public void CreateEmployee(EmployeeWebData employeeData)
+        public void CreateEmployee(IData<long, Employee> employeeData)
         {
+            var employeeWebData = (EmployeeWebData) employeeData;
+
             var employee = new Employee(
-                employeeData.FirstName,
-                employeeData.LastName,
-                employeeData.MiddleName,
-                (Gender)Enum.Parse(typeof(Gender), employeeData.Gender),
-                DateTime.Parse(employeeData.DateOfBirth),
-                employeeData.Email,
-                employeeData.ContactNo
+                employeeWebData.UniqueId,
+                employeeWebData.FirstName,
+                employeeWebData.LastName,
+                employeeWebData.MiddleName,
+                (Gender)Enum.Parse(typeof(Gender), employeeWebData.Gender),
+                DateTime.Parse(employeeWebData.DateOfBirth)
             );
+
+            employee.ChangeEmail(employeeWebData.Email);
+            employee.ChangeContactNo(employeeWebData.ContactNo);
+
             _employeeRepository.Add(employee);
             _employeeRepository.UnitOfWork.Commit();
         }

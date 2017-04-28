@@ -2,10 +2,9 @@
 
 namespace Aromato.Application
 {
-    public interface IEmployeeService<TKey, TData, TEntity> : IReadService<TKey, TEntity>
+    public interface IEmployeeService<TKey, TEntity> : IReadService<TKey, TEntity>
         where TEntity : IEntity<TKey>
-        where TData : IData<TKey, TEntity>
     {
-        void CreateEmployee(TData employeeData);
+        void CreateEmployee(IData<TKey, TEntity> employeeData);
     }
 }

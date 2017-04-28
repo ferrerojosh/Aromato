@@ -1,5 +1,6 @@
 ﻿using Aromato.Domain;
 using Aromato.Domain.Employee;
+using Aromato.Domain.Inventory;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Test.Infrastructure
@@ -12,15 +13,11 @@ namespace Aromato.Test.Infrastructure
         private const string DatabaseName = "aromata";
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase(DatabaseName);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
         }
 
         public void Commit()

@@ -11,6 +11,7 @@ namespace Aromato.Test.Application.Web
         [Fact]
         public void CanCreateEmployee()
         {
+            var uniqueId = "15102013";
             var firstName = "Employee";
             var lastName = "Sweat";
             var middleName = "Super";
@@ -24,7 +25,7 @@ namespace Aromato.Test.Application.Web
                 var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
                 var employeeService = new EmployeeWebService(employeeRepository);
 
-                var employeeWebData = new EmployeeWebData(firstName, lastName, middleName, gender,
+                var employeeWebData = new EmployeeWebData(uniqueId, firstName, lastName, middleName, gender,
                 dateOfBirth, email, contactNo);
 
                 employeeService.CreateEmployee(employeeWebData);

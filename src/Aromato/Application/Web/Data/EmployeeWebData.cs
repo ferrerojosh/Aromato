@@ -9,9 +9,10 @@ namespace Aromato.Application.Web.Data
 
         }
 
-        public EmployeeWebData(string firstName, string lastName, string middleName, string gender,
+        public EmployeeWebData(string uniqueId, string firstName, string lastName, string middleName, string gender,
            string dateOfBirth, string email, string contactNo)
         {
+            UniqueId = uniqueId;
             FirstName = firstName;
             LastName = lastName;
             MiddleName = middleName;
@@ -21,19 +22,21 @@ namespace Aromato.Application.Web.Data
             ContactNo = contactNo;
         }
 
-        public long Id { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string MiddleName { get; private set; }
-        public string Name { get; private set; }
-        public string ContactNo { get; private set; }
-        public string Email { get; private set; }
-        public string Gender { get; private set; }
-        public string DateOfBirth { get; private set; }
+        public long Id { get; set; }
+        public string UniqueId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public string Name { get; set; }
+        public string ContactNo { get; set; }
+        public string Email { get; set; }
+        public string Gender { get; set; }
+        public string DateOfBirth { get; set; }
 
         public IData<long, Employee> Fill(Employee entity)
         {
             Id = entity.Id;
+            UniqueId = entity.UniqueId;
             FirstName = entity.FirstName;
             LastName = entity.LastName;
             MiddleName = entity.MiddleName;

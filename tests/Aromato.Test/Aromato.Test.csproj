@@ -3,11 +3,8 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Domain\**" />
     <Compile Remove="Order\**" />
-    <EmbeddedResource Remove="Domain\**" />
     <EmbeddedResource Remove="Order\**" />
-    <None Remove="Domain\**" />
     <None Remove="Order\**" />
   </ItemGroup>
   <ItemGroup>
@@ -24,7 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Web" />
-    <Folder Include="Infrastructure" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Aromato\Aromato.csproj" />

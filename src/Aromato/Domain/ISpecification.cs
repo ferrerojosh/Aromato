@@ -22,6 +22,6 @@ namespace Aromato.Domain
         /// Checks if the specification defined is satisifed by the passed lambda expression.
         /// </summary>
         /// <returns></returns>
-        Expression<Func<TEntity, bool>> IsSatisified();
+        Expression<Func<TEntity, bool>> IsSatisified { get; }
     }
 }

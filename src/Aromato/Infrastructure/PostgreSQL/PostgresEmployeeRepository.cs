@@ -4,23 +4,16 @@ using Aromato.Domain;
 using Aromato.Domain.Employee;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aromato.Test.Infrastructure
+namespace Aromato.Infrastructure.PostgreSQL
 {
-    /// <summary>
-    /// In-memory employee repository for the purpose of unit testing. This should not belong to the main assembly.
-    /// </summary>
-    public class InMemoryEmployeeRepository : IEmployeeRepository
+    public class PostgresEmployeeRepository : IEmployeeRepository
     {
-        private readonly InMemoryUnitOfWork _unitOfWork;
 
-        public InMemoryEmployeeRepository(InMemoryUnitOfWork unitOfWork)
+        private readonly PostgresUnitOfWork _unitOfWork;
+
+        public PostgresEmployeeRepository(PostgresUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }
-
-        public Employee FindByUniqueId(string uniqueId)
-        {
-            return _unitOfWork.Employees.First(employee => employee.UniqueId == uniqueId);
         }
 
         public Employee FindById(long id)
@@ -52,7 +45,7 @@ namespace Aromato.Test.Infrastructure
 
         public void Remove(Employee aggregate)
         {
-            _unitOfWork.Employees.Remove(aggregate);
+            _unitOfWork.Remove(aggregate);
         }
 
         public void RemoveById(long id)
@@ -62,5 +55,9 @@ namespace Aromato.Test.Infrastructure
 
         public IUnitOfWork UnitOfWork => _unitOfWork;
 
+        public Employee FindByUniqueId(string uniqueId)
+        {
+            return _unitOfWork.Employees.First(e => e.UniqueId == uniqueId);
+        }
     }
 }

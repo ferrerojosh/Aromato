@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ferrerojosh/Aromato.svg?branch=master)](https://travis-ci.org/ferrerojosh/Aromato)
+
 # Aromato
 
 An application for the Digital and Microprocessor Laboratory using domain-driven design concepts.

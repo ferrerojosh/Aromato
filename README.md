@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/ferrerojosh/Aromato.svg?branch=master)](https://travis-ci.org/ferrerojosh/Aromato)
+[![Coverage Status](https://coveralls.io/repos/github/ferrerojosh/Aromato/badge.svg?branch=master)](https://coveralls.io/github/ferrerojosh/Aromato?branch=master)
 
 # Aromato
 

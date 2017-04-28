@@ -8,3 +8,7 @@ install:
 script:
   - cd ./tests/Aromato.Test
   - dotnet test
+before_install:
+  - pip install --user codecov
+after_success:
+  - codecov --file coverage/lcov.info --disable search

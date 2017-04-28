@@ -11,7 +11,7 @@ thus cross-platform.
 #### Windows
 
 If you have Microsoft Visual Studio 2017 installed then you can simply open the solution file.
-#### MacOS/Linux
+#### OSX/Linux
 
 Follow the instructions for installing .NET Core by clicking [here](https://www.microsoft.com/net/core).
 

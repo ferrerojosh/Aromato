@@ -4,7 +4,7 @@ dotnet: 1.0.1
 dist: trusty
 solution: Aromato.sln
 install:
-  - nuget restore Aromato.sln
+  - dotnet restore Aromato.sln
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release Aromato.sln

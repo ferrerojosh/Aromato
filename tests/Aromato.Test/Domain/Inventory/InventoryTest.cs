@@ -10,14 +10,14 @@ namespace Aromato.Test.Domain.Inventory
 
         public Aromato.Domain.Inventory.Inventory TestInventory()
         {
-            return new Aromato.Domain.Inventory.Inventory("Sample Inventory", "This is a sample inventory.");
+            return Aromato.Domain.Inventory.Inventory.Create("Sample Inventory", "This is a sample inventory.");
         }
 
         [Fact]
         public void CanAddItemToInventory()
         {
             var inventory = TestInventory();
-            var item = new Item("TESTITEM-0XD");
+            var item = Item.Create("TESTITEM-0XD", "Test item", "Test description");
 
             inventory.AddItemToInventory(item);
 
@@ -27,7 +27,7 @@ namespace Aromato.Test.Domain.Inventory
         public void CanRemoveItemFromInventory()
         {
             var inventory = TestInventory();
-            var item = new Item("TESTITEM-REMOVAL");
+            var item = Item.Create("TESTITEM-REMOVAL", "Test item2", "Test description2");
 
             inventory.AddItemToInventory(item);
             Assert.NotNull(inventory.Items.First(i => i == item));

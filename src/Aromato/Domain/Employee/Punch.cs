@@ -9,7 +9,15 @@ namespace Aromato.Domain.Employee
         /// </summary>
         protected Punch()
         {
-            DateAdded = DateTime.Now;
+        }
+
+        public static Punch Create(PunchType type)
+        {
+            return new Punch
+            {
+                Type = type,
+                DateAdded = DateTime.Now
+            };
         }
 
         public long Id { get; set; }

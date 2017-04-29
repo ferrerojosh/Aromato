@@ -7,7 +7,6 @@
         /// </summary>
         protected Role()
         {
-
         }
 
         public long Id { get; set; }

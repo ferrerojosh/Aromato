@@ -16,7 +16,7 @@ namespace Aromato.Test.Domain.Employee
             var gender = Gender.Male;
             var dateOfBirth = DateTime.Parse("02/02/1990");
 
-            return new Aromato.Domain.Employee.Employee(uniqueId, firstName, lastName, middleName, gender, dateOfBirth);
+            return Aromato.Domain.Employee.Employee.Create(uniqueId, firstName, lastName, middleName, gender, dateOfBirth);
         }
 
         [Fact]

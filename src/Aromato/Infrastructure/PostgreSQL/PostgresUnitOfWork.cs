@@ -60,6 +60,8 @@ namespace Aromato.Infrastructure.PostgreSQL
                 item.Property(i => i.DateAdded).HasColumnName("date_added");
                 item.Property(i => i.LastUpdated).HasColumnName("last_updated");
                 item.Property(i => i.Status).HasColumnName("status");
+                item.Property(i => i.Name).HasColumnName("name");
+                item.Property(i => i.Description).HasColumnName("description");
 
                 item.ToTable("item");
             });

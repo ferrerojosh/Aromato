@@ -10,20 +10,23 @@ namespace Aromato.Domain.Inventory
         /// </summary>
         protected Inventory()
         {
-            Items = new List<Item>();
         }
 
-        public Inventory(string name, string description) : this()
+        public static Inventory Create(string name, string description)
         {
-            Name = name;
-            Description = description;
+            return new Inventory
+            {
+                Name = name,
+                Description = description,
+                Items = new List<Item>()
+            };
         }
 
         public long Id { get; set; }
 
         public virtual string Name { get; private set; }
         public virtual string Description { get; private set; }
-        public List<Item> Items { get; protected set; }
+        public virtual List<Item> Items { get; protected set; }
 
         public virtual void AddItemToInventory(Item item)
         {

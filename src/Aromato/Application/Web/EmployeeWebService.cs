@@ -31,7 +31,7 @@ namespace Aromato.Application.Web
         {
             var employeeWebData = (EmployeeWebData) employeeData;
 
-            var employee = new Employee(
+            var employee = Employee.Create(
                 employeeWebData.UniqueId,
                 employeeWebData.FirstName,
                 employeeWebData.LastName,
@@ -45,6 +45,21 @@ namespace Aromato.Application.Web
 
             _employeeRepository.Add(employee);
             _employeeRepository.UnitOfWork.Commit();
+        }
+
+        public void ChangeEmail(long id, string email)
+        {
+            var employee = _employeeRepository.FindById(id);
+            employee.ChangeEmail(email);
+            _employeeRepository.UnitOfWork.Commit();
+        }
+
+        public void ChangeContactNo(long id, string contactNo)
+        {
+            var employee = _employeeRepository.FindById(id);
+            employee.ChangeContactNo(contactNo);
+            _employeeRepository.UnitOfWork.Commit();
+
         }
     }
 }

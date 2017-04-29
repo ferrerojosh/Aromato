@@ -21,38 +21,56 @@ namespace Aromato.WebApi.Controllers
             _employeeService = employeeService;
         }
 
-        // GET: api/Employee
+        // GET: api/employee
         [HttpGet]
         public IEnumerable<IData<long, Employee>> Get()
         {
             return _employeeService.RetrieveAll();
         }
 
-        // GET: api/Employee/5
+        // GET: api/employee/5
         [HttpGet("{id}", Name = "Get")]
         public IData<long, Employee> Get(long id)
         {
             return _employeeService.RetrieveById(id);
         }
         
-        // POST: api/Employee
+        // POST: api/employee
         [HttpPost]
-        public void Post([FromBody] EmployeeWebData data)
+        public dynamic Post([FromBody] EmployeeWebData data)
         {
-            Console.WriteLine(data);
-            _employeeService.CreateEmployee(data);
+            return DoActionOrFail(() => _employeeService.CreateEmployee(data));
+
         }
-        
-        // PUT: api/Employee/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // PUT: api/employee/5/email
+        [HttpPut("{id}/email")]
+        public dynamic ChangeEmail(long id, [FromBody] EmployeeWebData data)
         {
+            return DoActionOrFail(() => _employeeService.ChangeEmail(id, data.Email));
         }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        // PUT: api/employee/5/contactno
+        [HttpPut("{id}/contactno")]
+        public dynamic ChangeContactNo(long id, [FromBody] EmployeeWebData data)
         {
+            return DoActionOrFail(() => _employeeService.ChangeContactNo(id, data.Email));
+        }
+
+        private RestResponse DoActionOrFail(Action action)
+        {
+            var response = new RestResponse();
+            try
+            {
+                action.Invoke();
+                response.Success = true;
+            }
+            catch (ArgumentException e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+            }
+
+            return response;
         }
     }
 }

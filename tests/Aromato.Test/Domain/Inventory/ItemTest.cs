@@ -9,8 +9,8 @@ namespace Aromato.Test.Domain.Inventory
         [Fact]
         public void UniqueIdEqualityTest()
         {
-            var item = new Item("Sample-UNIQUEID");
-            var item2 = new Item("Sample-UNIQUEID");
+            var item = Item.Create("Sample-UNIQUEID", "Item", "Desc");
+            var item2 = Item.Create("Sample-UNIQUEID", "Item", "Desc");
 
             Assert.True(item == item2);
             Assert.True(item.Equals(item2));

@@ -9,22 +9,28 @@ namespace Aromato.Domain.Inventory
         /// </summary>
         protected Item()
         {
-            DateAdded = DateTime.Now;
-            LastUpdated = DateTime.Now;
         }
 
-        public Item(string uniqueId) : this()
+        public static Item Create(string uniqueId, string name, string description)
         {
-            UniqueId = uniqueId;
+            return new Item
+            {
+                Name = name,
+                Description = description,
+                DateAdded = DateTime.Now,
+                LastUpdated = DateTime.Now,
+                UniqueId = uniqueId
+            };
         }
 
         public long Id { get; set; }
 
         public virtual string UniqueId { get; private set; }
         public virtual string Name { get; private set; }
+        public virtual string Description { get; private set; }
         public virtual ItemStatus Status { get; protected set; }
-        public DateTime DateAdded { get; protected set; }
-        public DateTime LastUpdated { get; protected set; }
+        public virtual DateTime DateAdded { get; protected set; }
+        public virtual DateTime LastUpdated { get; protected set; }
 
         protected bool Equals(Item other)
         {

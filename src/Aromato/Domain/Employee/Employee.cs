@@ -11,46 +11,49 @@ namespace Aromato.Domain.Employee
         /// </summary>
         protected Employee()
         {
-            Roles = new List<Role>();
-            DutySchedules = new List<DutySchedule>();
-            Punches = new List<Punch>();
         }
 
-        public Employee(string uniqueId, string firstName, string lastName, string middleName, Gender gender, DateTime dateOfBirth)
+        public static Employee Create(string uniqueId, string firstName, string lastName, string middleName, Gender gender, DateTime dateOfBirth)
         {
-            UniqueId = uniqueId;
-            FirstName = firstName;
-            LastName = lastName;
-            MiddleName = middleName;
-            Gender = gender;
-            DateOfBirth = dateOfBirth;
+            return new Employee
+            {
+                Roles = new List<Role>(),
+                DutySchedules = new List<DutySchedule>(),
+                Punches = new List<Punch>(),
+                UniqueId = uniqueId,
+                FirstName = firstName,
+                LastName = lastName,
+                MiddleName = middleName,
+                Gender = gender,
+                DateOfBirth = dateOfBirth
+            };
         }
 
         public long Id { get; set; }
-        public virtual string UniqueId { get; private set;}
-        public virtual string FirstName { get; private set; }
-        public virtual string LastName { get; private set;}
-        public virtual string MiddleName { get; private set; }
+        public virtual string UniqueId { get; protected set;}
+        public virtual string FirstName { get; protected  set; }
+        public virtual string LastName { get; protected  set;}
+        public virtual string MiddleName { get; protected  set; }
         public virtual string Name => $"{LastName}, {FirstName} {MiddleName}";
         public virtual string ContactNo { get; private set; }
         public virtual string Email { get; private set; }
-        public virtual Gender Gender { get; private set; }
-        public virtual DateTime DateOfBirth { get; private set; }
-        public IList<Role> Roles { get; private set; }
-        public IList<DutySchedule> DutySchedules { get; private set; }
-        public IList<Punch> Punches { get; private set; }
+        public virtual Gender Gender { get; protected  set; }
+        public virtual DateTime DateOfBirth { get; protected set; }
+        public virtual IList<Role> Roles { get; protected  set; }
+        public virtual IList<DutySchedule> DutySchedules { get; protected set; }
+        public virtual IList<Punch> Punches { get; protected  set; }
 
-        public void AddRole(Role role)
+        public virtual void AddRole(Role role)
         {
             Roles.Add(role);
         }
 
-        public void AddSchedule(DutySchedule dutySchedule)
+        public virtual void AddSchedule(DutySchedule dutySchedule)
         {
             DutySchedules.Add(dutySchedule);
         }
 
-        public void ChangeEmail(string newEmail)
+        public virtual void ChangeEmail(string newEmail)
         {
             if (!RegexUtilities.IsValidEmail(newEmail))
             {
@@ -59,7 +62,7 @@ namespace Aromato.Domain.Employee
             Email = newEmail;
         }
 
-        public void ChangeContactNo(string newContactNo)
+        public virtual void ChangeContactNo(string newContactNo)
         {
             if (!RegexUtilities.IsValidContactNo(newContactNo))
             {
@@ -67,5 +70,7 @@ namespace Aromato.Domain.Employee
             }
             ContactNo = newContactNo;
         }
+
+
     }
 }

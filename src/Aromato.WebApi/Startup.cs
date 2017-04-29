@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Aromato.Application;
+﻿using Aromato.Application;
 using Aromato.Application.Web;
 using Aromato.Domain.Employee;
 using Aromato.Infrastructure.PostgreSQL;
@@ -34,7 +30,9 @@ namespace Aromato.WebApi
             services.AddDbContext<PostgresUnitOfWork>();
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+            });
 
             // Register services.
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();

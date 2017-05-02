@@ -19,7 +19,7 @@ namespace Aromato.Infrastructure.Crosscutting.AutoMapper.Profile
             mapper.ForMember(d => d.ContactNo, mc => mc.MapFrom(e => e.ContactNo));
             mapper.ForMember(d => d.Email, mc => mc.MapFrom(e => e.Email));
             mapper.ForMember(d => d.Gender, mc => mc.MapFrom(e => e.Gender.ToString()));
-            mapper.ForMember(d => d.DateOfBirth, mc => mc.MapFrom(e => e.DateOfBirth.ToString("d")));
+            mapper.ForMember(d => d.DateOfBirth, mc => mc.MapFrom(e => e.DateOfBirth.ToString("MM/dd/yyyy")));
 
             // web data => entity
         }

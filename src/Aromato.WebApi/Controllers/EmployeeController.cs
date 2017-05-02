@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Aromato.Application;
 using Aromato.Application.Web.Data;
 using Aromato.Domain.Employee;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aromato.WebApi.Controllers
@@ -14,23 +11,23 @@ namespace Aromato.WebApi.Controllers
     [Route("api/employee")]
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeService<long, Employee> _employeeService;
+        private readonly IEmployeeService<long> _employeeService;
 
-        public EmployeeController(IEmployeeService<long, Employee> employeeService)
+        public EmployeeController(IEmployeeService<long> employeeService)
         {
             _employeeService = employeeService;
         }
 
         // GET: api/employee
         [HttpGet]
-        public IEnumerable<IData<long, Employee>> Get()
+        public IEnumerable<IData> Get()
         {
             return _employeeService.RetrieveAll();
         }
 
         // GET: api/employee/5
         [HttpGet("{id}", Name = "Get")]
-        public IData<long, Employee> Get(long id)
+        public IData Get(long id)
         {
             return _employeeService.RetrieveById(id);
         }
@@ -49,6 +46,27 @@ namespace Aromato.WebApi.Controllers
             return DoActionOrFail(() => _employeeService.ChangeEmail(id, data.Email));
         }
 
+        [HttpPut("{id}/punch")]
+        public dynamic Punch(long id)
+        {
+            try
+            {
+                return new RestResponse
+                {
+                    Success = true,
+                    Data = _employeeService.Punch(id)
+                };
+            }
+            catch (Exception e)
+            {
+                return new RestResponse
+                {
+                    Success = false,
+                    Message = e.Message
+                };
+            }
+        }
+
         // PUT: api/employee/5/contactno
         [HttpPut("{id}/contactno")]
         public dynamic ChangeContactNo(long id, [FromBody] EmployeeWebData data)
@@ -64,7 +82,7 @@ namespace Aromato.WebApi.Controllers
                 action.Invoke();
                 response.Success = true;
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 response.Success = false;
                 response.Message = e.Message;

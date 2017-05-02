@@ -26,7 +26,7 @@ namespace Aromato.Infrastructure.PostgreSQL
             modelBuilder.Entity<Employee>(employee =>
             {
                 employee.Property(e => e.Id).HasColumnName("id");
-                employee.HasKey(e => e.Id).HasName("id");
+                employee.HasKey(e => e.Id);
                 employee.HasAlternateKey(e => e.UniqueId);
                 employee.Property(e => e.FirstName).HasColumnName("first_name");
                 employee.Property(e => e.MiddleName).HasColumnName("middle_name");
@@ -36,6 +36,8 @@ namespace Aromato.Infrastructure.PostgreSQL
                 employee.Property(e => e.Email).HasColumnName("email");
                 employee.Property(e => e.UniqueId).HasColumnName("unique_id");
                 employee.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
+
+                employee.HasMany(e => e.Punches).WithOne().HasForeignKey("employee_id");
 
                 employee.ToTable("employee");
             });
@@ -72,7 +74,6 @@ namespace Aromato.Infrastructure.PostgreSQL
                 punch.HasKey(p => p.Id);
                 punch.Property(p => p.DateAdded).HasColumnName("date_added");
                 punch.Property(p => p.Type).HasColumnName("type");
-
                 punch.ToTable("punch");
             });
 

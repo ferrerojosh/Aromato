@@ -1,12 +1,18 @@
 ﻿using Aromato.Application;
 using Aromato.Application.Web;
 using Aromato.Domain.Employee;
+using Aromato.Infrastructure.Crosscutting;
+using Aromato.Infrastructure.Crosscutting.AutoMapper;
+using Aromato.Infrastructure.Crosscutting.Extension;
 using Aromato.Infrastructure.PostgreSQL;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace Aromato.WebApi
 {
@@ -20,6 +26,8 @@ namespace Aromato.WebApi
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            env.ConfigureNLog("nlog.config");
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -28,6 +36,8 @@ namespace Aromato.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<PostgresUnitOfWork>();
+            services.AddAutoMapper();
+            services.UseAutoMapperTypeAdapter();
 
             // Add framework services.
             services.AddMvc(options =>
@@ -36,16 +46,18 @@ namespace Aromato.WebApi
 
             // Register services.
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
-            services.AddScoped<IEmployeeService<long, Employee>, EmployeeWebService>();
+            services.AddScoped<IEmployeeService<long>, EmployeeWebService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddNLog();
             loggerFactory.AddDebug();
 
             app.UseMvc();
+            app.AddNLogWeb();
         }
 
     }

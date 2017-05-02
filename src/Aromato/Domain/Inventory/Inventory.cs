@@ -18,7 +18,6 @@ namespace Aromato.Domain.Inventory
             {
                 Name = name,
                 Description = description,
-                Items = new List<Item>()
             };
         }
 
@@ -26,7 +25,7 @@ namespace Aromato.Domain.Inventory
 
         public virtual string Name { get; private set; }
         public virtual string Description { get; private set; }
-        public virtual List<Item> Items { get; protected set; }
+        public virtual List<Item> Items { get; } = new List<Item>();
 
         public virtual void AddItemToInventory(Item item)
         {

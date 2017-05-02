@@ -2,6 +2,7 @@
 using Aromato.Application.Web;
 using Aromato.Application.Web.Data;
 using Aromato.Test.Infrastructure;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Aromato.Test.Application.Web
@@ -20,13 +21,27 @@ namespace Aromato.Test.Application.Web
             var email = "hello@live.com";
             var contactNo = "0922222222222";
 
+            var loggerFactory = new LoggerFactory()
+                .AddConsole();
+
+            var logger = loggerFactory.CreateLogger<EmployeeWebService>();
+
             using (var unitOfWork = new InMemoryUnitOfWork())
             {
                 var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);
                 var employeeService = new EmployeeWebService(employeeRepository);
 
-                var employeeWebData = new EmployeeWebData(uniqueId, firstName, lastName, middleName, gender,
-                dateOfBirth, email, contactNo);
+                var employeeWebData = new EmployeeWebData
+                {
+                    UniqueId = uniqueId,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    MiddleName = middleName,
+                    Gender = gender,
+                    DateOfBirth = dateOfBirth,
+                    Email = email,
+                    ContactNo = contactNo
+                };
 
                 employeeService.CreateEmployee(employeeWebData);
 

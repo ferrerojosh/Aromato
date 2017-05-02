@@ -1,11 +1,9 @@
-﻿using Aromato.Domain;
-
-namespace Aromato.Application
+﻿namespace Aromato.Application
 {
-    public interface IEmployeeService<TKey, TEntity> : IReadService<TKey, TEntity>
-        where TEntity : IEntity<TKey>
+    public interface IEmployeeService<TKey> : IReadService<TKey>
     {
-        void CreateEmployee(IData<TKey, TEntity> employeeData);
+        IData Punch(TKey id);
+        void CreateEmployee(IData employeeData);
         void ChangeEmail(TKey id, string email);
         void ChangeContactNo(TKey id, string contactNo);
     }

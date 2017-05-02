@@ -18,7 +18,9 @@ namespace Aromato.Infrastructure.PostgreSQL
 
         public Employee FindById(long id)
         {
-            return _unitOfWork.Employees.Find(id);
+            return _unitOfWork.Employees
+                .Include(e => e.Punches)
+                .First(e => e.Id == id);
         }
 
         public IEnumerable<Employee> FindAll()

@@ -13,19 +13,18 @@ namespace Aromato.Application
     /// </remarks>
     /// <typeparam name="TKey">The identifier type.</typeparam>
     /// <typeparam name="TEntity">The entity type.</typeparam>
-    public interface IReadService<TKey, TEntity>
-        where TEntity : IEntity<TKey>
+    public interface IReadService<TKey>
     {
         /// <summary>
         /// Retrieves an aggregate via its identifier.
         /// </summary>
         /// <param name="id">The identifier object.</param>
         /// <returns>The aggregate object.</returns>
-        IData<TKey, TEntity> RetrieveById(TKey id);
+        IData RetrieveById(TKey id);
         /// <summary>
         /// Retrieves all aggregates.
         /// </summary>
         /// <returns>A list of aggregates.</returns>
-        IEnumerable<IData<TKey, TEntity>> RetrieveAll();
+        IEnumerable<IData> RetrieveAll();
     }
 }

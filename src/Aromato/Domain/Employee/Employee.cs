@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aromato.Helpers;
 
 namespace Aromato.Domain.Employee
@@ -17,9 +18,6 @@ namespace Aromato.Domain.Employee
         {
             return new Employee
             {
-                Roles = new List<Role>(),
-                DutySchedules = new List<DutySchedule>(),
-                Punches = new List<Punch>(),
                 UniqueId = uniqueId,
                 FirstName = firstName,
                 LastName = lastName,
@@ -39,9 +37,9 @@ namespace Aromato.Domain.Employee
         public virtual string Email { get; private set; }
         public virtual Gender Gender { get; protected  set; }
         public virtual DateTime DateOfBirth { get; protected set; }
-        public virtual IList<Role> Roles { get; protected  set; }
-        public virtual IList<DutySchedule> DutySchedules { get; protected set; }
-        public virtual IList<Punch> Punches { get; protected  set; }
+        public virtual IList<Role> Roles { get; } = new List<Role>();
+        public virtual IList<DutySchedule> DutySchedules { get; } = new List<DutySchedule>();
+        public virtual IList<Punch> Punches { get; } = new List<Punch>();
 
         public virtual void AddRole(Role role)
         {
@@ -51,6 +49,29 @@ namespace Aromato.Domain.Employee
         public virtual void AddSchedule(DutySchedule dutySchedule)
         {
             DutySchedules.Add(dutySchedule);
+        }
+
+        public virtual Punch DoPunch()
+        {
+            Punch punch;
+            if (Punches.Count == 0)
+            {
+                punch = Punch.Create(PunchType.In);
+            }
+            else
+            {
+                var lastPunch = Punches.Last(p => p.DateAdded.Date == DateTime.Now.Date);
+
+                if (lastPunch.DateAdded.Minute == DateTime.Now.Minute)
+                {
+                    throw new InvalidOperationException("Cannot punch in the same minute");
+                }
+
+                punch = Punch.Create(lastPunch.Type == PunchType.In ? PunchType.Out : PunchType.In);
+            }
+
+            Punches.Add(punch);
+            return punch;
         }
 
         public virtual void ChangeEmail(string newEmail)

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Aromato.Application.Web.Data;
 using Aromato.Domain.Employee;
+using Aromato.Infrastructure.Crosscutting;
+using Aromato.Infrastructure.Crosscutting.Extension;
+using Aromato.Infrastructure.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Aromato.Application.Web
 {
-    public class EmployeeWebService : IEmployeeService<long, Employee>
+    public class EmployeeWebService : IEmployeeService<long>
     {
+        private readonly ILogger _logger = AromatoLogging.CreateLogger<EmployeeWebService>();
         private readonly IEmployeeRepository _employeeRepository;
 
         public EmployeeWebService(IEmployeeRepository employeeRepository)
@@ -15,19 +19,28 @@ namespace Aromato.Application.Web
             _employeeRepository = employeeRepository;
         }
 
-        public IData<long, Employee> RetrieveById(long id)
+        public IData RetrieveById(long id)
         {
             var employee = _employeeRepository.FindById(id);
-            return new EmployeeWebData().Fill(employee);
+            return employee.AsData<EmployeeWebData>();
         }
 
-        public IEnumerable<IData<long, Employee>> RetrieveAll()
+        public IEnumerable<IData> RetrieveAll()
         {
             var employees = _employeeRepository.FindAll();
-            return employees.Select(employee => new EmployeeWebData().Fill(employee));
+            return employees.AsEnumerableData<EmployeeWebData>();
         }
 
-        public void CreateEmployee(IData<long, Employee> employeeData)
+        public IData Punch(long id)
+        {
+            _logger.LogInformation("New punch for employee id: {id}", id);
+            var employee = _employeeRepository.FindById(id);
+            var punch = employee.DoPunch();
+            _employeeRepository.UnitOfWork.Commit();
+            return punch.AsData<EmployeeWebData>();
+        }
+
+        public void CreateEmployee(IData employeeData)
         {
             var employeeWebData = (EmployeeWebData) employeeData;
 

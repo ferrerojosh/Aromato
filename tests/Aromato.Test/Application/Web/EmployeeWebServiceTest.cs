@@ -1,7 +1,10 @@
 ﻿using System.Linq;
 using Aromato.Application.Web;
 using Aromato.Application.Web.Data;
+using Aromato.Infrastructure.Crosscutting;
+using Aromato.Infrastructure.Crosscutting.AutoMapper;
 using Aromato.Test.Infrastructure;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
@@ -21,10 +24,7 @@ namespace Aromato.Test.Application.Web
             var email = "hello@live.com";
             var contactNo = "0922222222222";
 
-            var loggerFactory = new LoggerFactory()
-                .AddConsole();
-
-            var logger = loggerFactory.CreateLogger<EmployeeWebService>();
+            TypeMapperFactory.UseFactory(new AutoMapperTypeMapperFactory());
 
             using (var unitOfWork = new InMemoryUnitOfWork())
             {

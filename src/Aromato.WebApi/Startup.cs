@@ -1,6 +1,7 @@
 ﻿using Aromato.Application;
 using Aromato.Application.Web;
 using Aromato.Domain.Employee;
+using Aromato.Domain.Inventory;
 using Aromato.Infrastructure.Crosscutting;
 using Aromato.Infrastructure.Crosscutting.AutoMapper;
 using Aromato.Infrastructure.Crosscutting.Extension;
@@ -46,7 +47,10 @@ namespace Aromato.WebApi
 
             // Register services.
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
-            services.AddScoped<IEmployeeService<long>, EmployeeWebService>();
+            services.AddScoped<IInventoryRepository, PostgresInventoryRepository>();
+
+            services.AddScoped<IInventoryService, InventoryWebService>();
+            services.AddScoped<IEmployeeService, EmployeeWebService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

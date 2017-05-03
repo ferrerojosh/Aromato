@@ -11,30 +11,30 @@ namespace Aromato.WebApi.Controllers
     [Route("api/employee")]
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeService<long> _employeeService;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeService<long> employeeService)
+        public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
 
         // GET: api/employee
         [HttpGet]
-        public IEnumerable<IData> Get()
+        public IEnumerable<IData> GetEmployees()
         {
             return _employeeService.RetrieveAll();
         }
 
         // GET: api/employee/5
-        [HttpGet("{id}", Name = "Get")]
-        public IData Get(long id)
+        [HttpGet("{id}")]
+        public IData GetEmployee(long id)
         {
             return _employeeService.RetrieveById(id);
         }
         
         // POST: api/employee
         [HttpPost]
-        public dynamic Post([FromBody] EmployeeWebData data)
+        public dynamic CreateEmployee([FromBody] EmployeeWebData data)
         {
             return DoActionOrFail(() => _employeeService.CreateEmployee(data));
 

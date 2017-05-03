@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Aromato.Application.Web.Data;
 using Aromato.Domain.Employee;
-using Aromato.Infrastructure.Crosscutting;
 using Aromato.Infrastructure.Crosscutting.Extension;
 using Aromato.Infrastructure.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace Aromato.Application.Web
 {
-    public class EmployeeWebService : IEmployeeService<long>
+    public class EmployeeWebService : IEmployeeService
     {
         private readonly ILogger _logger = AromatoLogging.CreateLogger<EmployeeWebService>();
         private readonly IEmployeeRepository _employeeRepository;
@@ -44,14 +43,7 @@ namespace Aromato.Application.Web
         {
             var employeeWebData = (EmployeeWebData) employeeData;
 
-            var employee = Employee.Create(
-                employeeWebData.UniqueId,
-                employeeWebData.FirstName,
-                employeeWebData.LastName,
-                employeeWebData.MiddleName,
-                (Gender)Enum.Parse(typeof(Gender), employeeWebData.Gender),
-                DateTime.Parse(employeeWebData.DateOfBirth)
-            );
+            var employee = employeeWebData.AsEntity<Employee>();
 
             employee.ChangeEmail(employeeWebData.Email);
             employee.ChangeContactNo(employeeWebData.ContactNo);

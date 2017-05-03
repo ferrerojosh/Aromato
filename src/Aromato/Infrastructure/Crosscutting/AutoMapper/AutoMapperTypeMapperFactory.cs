@@ -11,6 +11,8 @@ namespace Aromato.Infrastructure.Crosscutting.AutoMapper
             {
                 cfg.AddProfile<EmployeeWebProfile>();
                 cfg.AddProfile<PunchWebProfile>();
+                cfg.AddProfile<InventoryWebProfile>();
+                cfg.AddProfile<ItemWebProfile>();
             });
         }
 

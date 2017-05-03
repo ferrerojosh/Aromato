@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Aromato.Application;
 using Aromato.Domain;
+using Aromato.Domain.Inventory;
 
 namespace Aromato.Infrastructure.Crosscutting.Extension
 {
     /// <summary>
-    /// Data projection extensions 
+    /// Data projection extensions.
     /// </summary>
     public static class DataProjectionExtension
     {
@@ -42,7 +43,22 @@ namespace Aromato.Infrastructure.Crosscutting.Extension
         public static IEnumerable<TData> AsEnumerableData<TData>(this IEnumerable<IEntity<long>> items)
             where TData : IData
         {
-            return TypeMapperFactory.Instance.CreateMapper().MapTo<ICollection<TData>>(items);
+            return TypeMapperFactory.Instance.CreateMapper().MapTo<IEnumerable<TData>>(items);
+        }
+
+        public static TEntity AsEntity<TEntity>(this IData item)
+        {
+            return TypeMapperFactory.Instance.CreateMapper().MapTo<TEntity>(item);
+        }
+
+        public static ICollection<TEntity> AsCollectionEntity<TEntity>(this ICollection<IData> items)
+        {
+            return TypeMapperFactory.Instance.CreateMapper().MapTo<ICollection<TEntity>>(items);
+        }
+
+        public static IEnumerable<TEntity> AsEnumerableEntity<TEntity>(this IEnumerable<IData> items)
+        {
+            return TypeMapperFactory.Instance.CreateMapper().MapTo<IEnumerable<TEntity>>(items);
         }
     }
 }

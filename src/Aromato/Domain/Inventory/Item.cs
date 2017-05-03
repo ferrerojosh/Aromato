@@ -4,6 +4,10 @@ namespace Aromato.Domain.Inventory
 {
     public class Item : IEntity<long>
     {
+
+        private DateTime? _dateAdded;
+        private DateTime? _lastUpdated;
+
         /// <summary>
         /// Empty constructor as required by Entity Framework or any OR/M libraries.
         /// </summary>
@@ -17,8 +21,6 @@ namespace Aromato.Domain.Inventory
             {
                 Name = name,
                 Description = description,
-                DateAdded = DateTime.Now,
-                LastUpdated = DateTime.Now,
                 UniqueId = uniqueId
             };
         }
@@ -29,8 +31,18 @@ namespace Aromato.Domain.Inventory
         public virtual string Name { get; private set; }
         public virtual string Description { get; private set; }
         public virtual ItemStatus Status { get; protected set; }
-        public virtual DateTime DateAdded { get; protected set; }
-        public virtual DateTime LastUpdated { get; protected set; }
+
+        public virtual DateTime? DateAdded
+        {
+            get => _dateAdded ?? (_dateAdded = DateTime.Now);
+            protected set => _dateAdded = value;
+        }
+
+        public virtual DateTime? LastUpdated
+        {
+            get => _lastUpdated ?? (_lastUpdated = DateTime.Now);
+            protected set => _lastUpdated = value;
+        }
 
         protected bool Equals(Item other)
         {

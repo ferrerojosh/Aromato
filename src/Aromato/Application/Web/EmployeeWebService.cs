@@ -43,7 +43,7 @@ namespace Aromato.Application.Web
         {
             var employeeWebData = (EmployeeWebData) employeeData;
 
-            var employee = employeeWebData.AsEntity<Employee>();
+            var employee = employeeWebData.AsEntity<long, Employee>();
 
             employee.ChangeEmail(employeeWebData.Email);
             employee.ChangeContactNo(employeeWebData.ContactNo);

@@ -20,7 +20,7 @@ namespace Aromato.Infrastructure.Crosscutting.AutoMapper.Profile
 //            mapperLeft.ForMember(e => e.Id, mc => mc.MapFrom(d => d.Id));
             mapperLeft.ForMember(e => e.Name, mc => mc.MapFrom(d => d.Name));
             mapperLeft.ForMember(e => e.Description, mc => mc.MapFrom(d => d.Description));
-            mapperLeft.ForMember(e => e.Items, mc => mc.MapFrom(d => d.Items.AsEnumerableEntity<Item>()));
+            mapperLeft.ForMember(e => e.Items, mc => mc.MapFrom(d => d.Items.AsEnumerableEntity<long, Item>()));
         }
 
     }

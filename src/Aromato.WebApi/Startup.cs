@@ -2,11 +2,7 @@
 using Aromato.Application.Web;
 using Aromato.Domain.Employee;
 using Aromato.Domain.Inventory;
-using Aromato.Infrastructure.Crosscutting;
-using Aromato.Infrastructure.Crosscutting.AutoMapper;
-using Aromato.Infrastructure.Crosscutting.Extension;
 using Aromato.Infrastructure.PostgreSQL;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,18 +33,17 @@ namespace Aromato.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<PostgresUnitOfWork>();
-            services.AddAutoMapper();
-            services.UseAutoMapperTypeAdapter();
 
             // Add framework services.
             services.AddMvc(options =>
             {
             });
 
-            // Register services.
+            // Register repositories.
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
             services.AddScoped<IInventoryRepository, PostgresInventoryRepository>();
 
+            // Register services.
             services.AddScoped<IInventoryService, InventoryWebService>();
             services.AddScoped<IEmployeeService, EmployeeWebService>();
         }

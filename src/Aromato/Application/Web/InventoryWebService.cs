@@ -42,7 +42,7 @@ namespace Aromato.Application.Web
 
         public void CreateInventory(IData inventoryData)
         {
-            var inventory = inventoryData.AsEntity<Inventory>();
+            var inventory = inventoryData.AsEntity<long, Inventory>();
             _inventoryRepository.Add(inventory);
             _inventoryRepository.UnitOfWork.Commit();
         }
@@ -50,7 +50,7 @@ namespace Aromato.Application.Web
         public void AddItemToInventory(long inventoryId, IData itemData)
         {
             var inventory = _inventoryRepository.FindById(inventoryId);
-            inventory.AddItemToInventory(itemData.AsEntity<Item>());
+            inventory.AddItemToInventory(itemData.AsEntity<long, Item>());
             _inventoryRepository.UnitOfWork.Commit();
         }
     }

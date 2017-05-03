@@ -8,7 +8,7 @@ namespace Aromato.Infrastructure.Events
 
         public static void Raise<TEvent>(TEvent @event) where TEvent : IDomainEvent
         {
-            Dispatcher.Dispatch(@event);
+            Dispatcher?.Dispatch(@event);
         }
     }
 }

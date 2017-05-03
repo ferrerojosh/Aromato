@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using Aromato.Domain.Employee;
+using Aromato.Infrastructure.Events;
 using Xunit;
 
 namespace Aromato.Test.Domain.Employee
@@ -15,8 +16,10 @@ namespace Aromato.Test.Domain.Employee
             var middleName = "Super";
             var gender = Gender.Male;
             var dateOfBirth = DateTime.Parse("02/02/1990");
+            var email = "hello@live.com";
+            var contactNo = "09223334444";
 
-            return Aromato.Domain.Employee.Employee.Create(uniqueId, firstName, lastName, middleName, gender, dateOfBirth);
+            return Aromato.Domain.Employee.Employee.Create(uniqueId, firstName, lastName, middleName, gender, dateOfBirth, email, contactNo);
         }
 
         [Fact]

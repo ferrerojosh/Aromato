@@ -1,11 +1,7 @@
 ﻿using System.Linq;
 using Aromato.Application.Web;
 using Aromato.Application.Web.Data;
-using Aromato.Infrastructure.Crosscutting;
-using Aromato.Infrastructure.Crosscutting.AutoMapper;
 using Aromato.Test.Infrastructure;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Aromato.Test.Application.Web

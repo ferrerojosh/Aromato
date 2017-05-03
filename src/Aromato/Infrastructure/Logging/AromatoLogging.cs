@@ -5,7 +5,18 @@ namespace Aromato.Infrastructure.Logging
 {
     public class AromatoLogging
     {
-        public static ILoggerFactory LoggerFactory { get; } = new LoggerFactory().AddNLog(new NLogProviderOptions());
+        private static ILoggerFactory _factory;
+
+        public static ILoggerFactory LoggerFactory
+        {
+            get
+            {
+                if (_factory != null) return _factory;
+                _factory = new LoggerFactory().AddNLog();
+                return _factory;
+            }
+            set => _factory = value;
+        }
         public static ILogger CreateLogger<T>() => LoggerFactory.CreateLogger<T>();
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aromato.Domain.Employee.Events;
 using Aromato.Helpers;
+using Aromato.Infrastructure.Events;
 
 namespace Aromato.Domain.Employee
 {
@@ -14,8 +16,16 @@ namespace Aromato.Domain.Employee
         {
         }
 
-        public static Employee Create(string uniqueId, string firstName, string lastName, string middleName, Gender gender, DateTime dateOfBirth)
+        public static Employee Create(string uniqueId, string firstName, string lastName, string middleName, Gender gender, DateTime dateOfBirth, string email, string contactNo)
         {
+            if (!RegexUtilities.IsValidEmail(email))
+            {
+                throw new ArgumentException("NewEmail is not valid.", nameof(email));
+            }
+            if (!RegexUtilities.IsValidContactNo(contactNo))
+            {
+                throw new ArgumentException("Contact number is not valid.", nameof(contactNo));
+            }
             return new Employee
             {
                 UniqueId = uniqueId,
@@ -23,7 +33,9 @@ namespace Aromato.Domain.Employee
                 LastName = lastName,
                 MiddleName = middleName,
                 Gender = gender,
-                DateOfBirth = dateOfBirth
+                DateOfBirth = dateOfBirth,
+                ContactNo = contactNo,
+                Email = email
             };
         }
 
@@ -35,7 +47,7 @@ namespace Aromato.Domain.Employee
         public virtual string Name => $"{LastName}, {FirstName} {MiddleName}";
         public virtual string ContactNo { get; private set; }
         public virtual string Email { get; private set; }
-        public virtual Gender Gender { get; protected  set; }
+        public virtual Gender Gender { get; protected set; }
         public virtual DateTime DateOfBirth { get; protected set; }
         public virtual IList<Role> Roles { get; } = new List<Role>();
         public virtual IList<DutySchedule> DutySchedules { get; } = new List<DutySchedule>();
@@ -78,16 +90,25 @@ namespace Aromato.Domain.Employee
         {
             if (!RegexUtilities.IsValidEmail(newEmail))
             {
-                throw new ArgumentException($"{newEmail} is not a valid email");
+                throw new ArgumentException("NewEmail is not valid.", nameof(newEmail));
             }
+
+            var oldEmail = Email;
             Email = newEmail;
+
+            DomainEvent.Raise(new EmployeeEmailChanged
+            {   
+                NewEmail = newEmail,
+                OldEmail = oldEmail,
+                EmployeeId = Id
+            });
         }
 
         public virtual void ChangeContactNo(string newContactNo)
         {
             if (!RegexUtilities.IsValidContactNo(newContactNo))
             {
-                throw new ArgumentException($"{newContactNo} is not a valid number");
+                throw new ArgumentException("Contact number is not valid.", nameof(newContactNo));
             }
             ContactNo = newContactNo;
         }

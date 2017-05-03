@@ -20,7 +20,7 @@ namespace Aromato.Infrastructure.PostgreSQL
         {
             return _unitOfWork.Employees
                 .Include(e => e.Punches)
-                .First(e => e.Id == id);
+                .FirstOrDefault(e => e.Id == id);
         }
 
         public IEnumerable<Employee> FindAll()

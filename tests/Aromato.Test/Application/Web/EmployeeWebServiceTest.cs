@@ -24,8 +24,6 @@ namespace Aromato.Test.Application.Web
             var email = "hello@live.com";
             var contactNo = "0922222222222";
 
-            TypeMapperFactory.UseFactory(new AutoMapperTypeMapperFactory());
-
             using (var unitOfWork = new InMemoryUnitOfWork())
             {
                 var employeeRepository = new InMemoryEmployeeRepository(unitOfWork);

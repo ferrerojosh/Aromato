@@ -7,6 +7,7 @@ namespace Aromato.Infrastructure.Crosscutting
     /// <summary>
     /// Type mapping api
     /// </summary>
+    /// <remarks>Taken from https://gist.github.com/ilyapalkin/8822638 </remarks>
     public class Mapper : IMapper
     {
         /// <summary>

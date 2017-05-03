@@ -3,7 +3,6 @@ using System.Linq;
 using Aromato.Application.Web.Data;
 using Aromato.Domain.Inventory;
 using Aromato.Infrastructure.Crosscutting.Extension;
-using Aromato.Infrastructure.PostgreSQL;
 
 namespace Aromato.Application.Web
 {
@@ -40,17 +39,27 @@ namespace Aromato.Application.Web
                 .Items.First(i => i.UniqueId == uniqueId).AsData<ItemWebData>();
         }
 
-        public void CreateInventory(IData inventoryData)
+        public void CreateInventory(IData data)
         {
-            var inventory = inventoryData.AsEntity<long, Inventory>();
+            var inventoryData = (InventoryWebData) data;
+            var inventory = Inventory.Create(
+                inventoryData.Name,
+                inventoryData.Description
+            );
             _inventoryRepository.Add(inventory);
             _inventoryRepository.UnitOfWork.Commit();
         }
 
-        public void AddItemToInventory(long inventoryId, IData itemData)
+        public void AddItemToInventory(long inventoryId, IData data)
         {
             var inventory = _inventoryRepository.FindById(inventoryId);
-            inventory.AddItemToInventory(itemData.AsEntity<long, Item>());
+            var itemData = (ItemWebData) data;
+
+            inventory.AddItemToInventory(Item.Create(
+                itemData.UniqueId,
+                itemData.Name,
+                itemData.Description
+            ));
             _inventoryRepository.UnitOfWork.Commit();
         }
     }

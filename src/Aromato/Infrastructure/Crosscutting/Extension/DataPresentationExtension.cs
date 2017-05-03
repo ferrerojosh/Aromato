@@ -10,7 +10,6 @@ namespace Aromato.Infrastructure.Crosscutting.Extension
     /// </summary>
     public static class DataPresentationExtension
     {
-
         private static readonly Mapper Mapper = new Mapper();
 
         static DataPresentationExtension()
@@ -18,9 +17,7 @@ namespace Aromato.Infrastructure.Crosscutting.Extension
             global::AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<EmployeeWebProfile>();
-                cfg.AddProfile<PunchWebProfile>();
                 cfg.AddProfile<InventoryWebProfile>();
-                cfg.AddProfile<ItemWebProfile>();
             });
         }
 
@@ -58,45 +55,6 @@ namespace Aromato.Infrastructure.Crosscutting.Extension
             where TData : IData
         {
             return Mapper.MapTo<IEnumerable<TData>>(items);
-        }
-
-        /// <summary>
-        /// An extension method for data transfer object types to be presented as an instance of <see cref="IEntity{TKey}"/>
-        /// </summary>
-        /// <typeparam name="TEntity">The type of entity implementing <see cref="IEntity{TKey}"/></typeparam>
-        /// <typeparam name="TKey">The type of key.</typeparam>
-        /// <param name="item">The presentation data implementing <see cref="IData"/></param>
-        /// <returns>The entity created from the presentation data.</returns>
-        public static TEntity AsEntity<TKey, TEntity>(this IData item)
-            where TEntity : IEntity<TKey>
-        {
-            return Mapper.MapTo<TEntity>(item);
-        }
-
-        /// <summary>
-        /// An extension method for data transfer object types to be presented as an instance of <see cref="ICollection{TEntity}"/>
-        /// </summary>
-        /// <typeparam name="TEntity">The type of entity implementing <see cref="IEntity{TKey}"/></typeparam>
-        /// <typeparam name="TKey">The type of key.</typeparam>
-        /// <param name="items">The presentation data implementing <see cref="ICollection{IData}"/></param>
-        /// <returns>A collection of entities created from the presentation collection.</returns>
-        public static ICollection<TEntity> AsCollectionEntity<TKey, TEntity>(this ICollection<IData> items)
-            where TEntity : IEntity<TKey>
-        {
-            return Mapper.MapTo<ICollection<TEntity>>(items);
-        }
-
-        /// <summary>
-        /// An extension method for data transfer object types to be presented as an instance of <see cref="IEnumerable{TEntity}"/>
-        /// </summary>
-        /// <typeparam name="TEntity">The type of entity implementing <see cref="IEntity{TKey}"/></typeparam>
-        /// <typeparam name="TKey">The type of key.</typeparam>
-        /// <param name="items">The presentation data implementing <see cref="IEnumerable{IData}"/></param>
-        /// <returns>An enumerable entities created from the presentation enumerable.</returns>
-        public static IEnumerable<TEntity> AsEnumerableEntity<TKey, TEntity>(this IEnumerable<IData> items)
-            where TEntity : IEntity<TKey>
-        {
-            return Mapper.MapTo<IEnumerable<TEntity>>(items);
         }
     }
 }

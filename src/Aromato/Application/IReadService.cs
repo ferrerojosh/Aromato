@@ -12,8 +12,7 @@ namespace Aromato.Application
     /// application services that will require repository-like interfaces.
     /// </remarks>
     /// <typeparam name="TKey">The identifier type.</typeparam>
-    /// <typeparam name="TEntity">The entity type.</typeparam>
-    public interface IReadService<TKey>
+    public interface IReadService<in TKey>
     {
         /// <summary>
         /// Retrieves an aggregate via its identifier.

@@ -41,9 +41,11 @@ namespace Aromato.WebApi.Controllers
         }
         // PUT: api/employee/5/email
         [HttpPut("{id}/email")]
-        public dynamic ChangeEmail(long id, [FromBody] EmployeeWebData data)
+        public void ChangeEmail(long id, [FromBody] EmployeeWebData data)
         {
-            return DoActionOrFail(() => _employeeService.ChangeEmail(id, data.Email));
+            //return DoActionOrFail(() => _employeeService.ChangeEmail(id, data.Email));
+
+            _employeeService.ChangeEmail(id, data.Email);
         }
 
         [HttpPut("{id}/punch")]

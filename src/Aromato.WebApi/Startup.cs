@@ -1,13 +1,17 @@
 ﻿using Aromato.Application;
 using Aromato.Application.Web;
+using Aromato.Domain;
 using Aromato.Domain.Employee;
 using Aromato.Domain.Inventory;
+using Aromato.Infrastructure.Events;
+using Aromato.Infrastructure.Logging;
 using Aromato.Infrastructure.PostgreSQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
 
@@ -38,7 +42,7 @@ namespace Aromato.WebApi
             services.AddMvc(options =>
             {
             });
-
+            
             // Register repositories.
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
             services.AddScoped<IInventoryRepository, PostgresInventoryRepository>();
@@ -51,9 +55,11 @@ namespace Aromato.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddNLog();
-            loggerFactory.AddDebug();
+            // set primary logger
+            AromatoLogging.LoggerFactory = loggerFactory.AddNLog().AddConsole();
+            DomainEvent.Dispatcher = new AutoFacEventDispatcher();
+
+            LogManager.Configuration.Variables["connectionString"] = Configuration.GetConnectionString("aromato");
 
             app.UseMvc();
             app.AddNLogWeb();

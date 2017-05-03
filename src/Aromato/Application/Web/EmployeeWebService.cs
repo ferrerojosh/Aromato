@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using Aromato.Application.Web.Data;
 using Aromato.Domain.Employee;
 using Aromato.Infrastructure.Crosscutting.Extension;
-using Aromato.Infrastructure.Logging;
-using Microsoft.Extensions.Logging;
 
 namespace Aromato.Application.Web
 {
     public class EmployeeWebService : IEmployeeService
     {
-        private readonly ILogger _logger = AromatoLogging.CreateLogger<EmployeeWebService>();
         private readonly IEmployeeRepository _employeeRepository;
 
         public EmployeeWebService(IEmployeeRepository employeeRepository)
@@ -20,7 +17,7 @@ namespace Aromato.Application.Web
 
         public IData RetrieveById(long id)
         {
-            var employee = _employeeRepository.FindById(id);
+            var employee = FindByIdOrFail(id);
             return employee.AsData<EmployeeWebData>();
         }
 
@@ -32,8 +29,7 @@ namespace Aromato.Application.Web
 
         public IData Punch(long id)
         {
-            _logger.LogInformation("New punch for employee id: {id}", id);
-            var employee = _employeeRepository.FindById(id);
+            var employee = FindByIdOrFail(id);
             var punch = employee.DoPunch();
             _employeeRepository.UnitOfWork.Commit();
             return punch.AsData<EmployeeWebData>();
@@ -43,7 +39,19 @@ namespace Aromato.Application.Web
         {
             var employeeWebData = (EmployeeWebData) employeeData;
 
-            var employee = employeeWebData.AsEntity<long, Employee>();
+            var gender = (Gender) Enum.Parse(typeof(Gender), employeeWebData.Gender);
+            var dateOfBirth = DateTime.Parse(employeeWebData.DateOfBirth);
+
+            var employee = Employee.Create(
+                employeeWebData.UniqueId,
+                employeeWebData.FirstName,
+                employeeWebData.LastName,
+                employeeWebData.MiddleName,
+                gender,
+                dateOfBirth,
+                employeeWebData.Email,
+                employeeWebData.ContactNo
+            );
 
             employee.ChangeEmail(employeeWebData.Email);
             employee.ChangeContactNo(employeeWebData.ContactNo);
@@ -54,7 +62,7 @@ namespace Aromato.Application.Web
 
         public void ChangeEmail(long id, string email)
         {
-            var employee = _employeeRepository.FindById(id);
+            var employee = FindByIdOrFail(id);
             employee.ChangeEmail(email);
             _employeeRepository.UnitOfWork.Commit();
         }
@@ -64,7 +72,16 @@ namespace Aromato.Application.Web
             var employee = _employeeRepository.FindById(id);
             employee.ChangeContactNo(contactNo);
             _employeeRepository.UnitOfWork.Commit();
+        }
 
+        private Employee FindByIdOrFail(long id)
+        {
+            var employee = _employeeRepository.FindById(id);
+            if (employee == null)
+            {
+                throw new InvalidOperationException($"Employee with id {id} does not exist.");
+            }
+            return employee;
         }
     }
 }

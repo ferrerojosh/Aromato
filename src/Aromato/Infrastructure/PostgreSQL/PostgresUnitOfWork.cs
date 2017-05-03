@@ -1,7 +1,9 @@
-﻿using Aromato.Domain;
+﻿using System.IO;
+using Aromato.Domain;
 using Aromato.Domain.Employee;
 using Aromato.Domain.Inventory;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Aromato.Infrastructure.PostgreSQL
 {
@@ -12,13 +14,13 @@ namespace Aromato.Infrastructure.PostgreSQL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var config = AromatoConfig.Instance;
-            optionsBuilder.UseNpgsql(
-                $"Host={config["database:postgres:host"]};" +
-                $"Database={config["database:postgres:name"]};" +
-                $"Username={config["database:postgres:user"]};" +
-                $"Password={config["database:postgres:pass"]}"
-            );
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+
+            var config = builder.Build();
+
+            optionsBuilder.UseNpgsql(config.GetConnectionString("aromato"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

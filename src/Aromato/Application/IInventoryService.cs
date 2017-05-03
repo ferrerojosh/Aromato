@@ -6,7 +6,7 @@ namespace Aromato.Application
     {
         IEnumerable<IData> RetrieveItemsByName(long inventoryId, string itemName);
         IData RetrieveItemByUniqueId(long inventoryId, string uniqueId);
-        void CreateInventory(IData inventoryData);
-        void AddItemToInventory(long inventoryId, IData itemData);
+        void CreateInventory(IData data);
+        void AddItemToInventory(long inventoryId, IData data);
     }
 }

@@ -41,11 +41,11 @@ namespace Aromato.WebApi.Controllers
         }
         // PUT: api/employee/5/email
         [HttpPut("{id}/email")]
-        public void ChangeEmail(long id, [FromBody] EmployeeWebData data)
+        public dynamic ChangeEmail(long id, [FromBody] EmployeeWebData data)
         {
-            //return DoActionOrFail(() => _employeeService.ChangeEmail(id, data.Email));
+            return DoActionOrFail(() => _employeeService.ChangeEmail(id, data.Email));
 
-            _employeeService.ChangeEmail(id, data.Email);
+            //_employeeService.ChangeEmail(id, data.Email);
         }
 
         [HttpPut("{id}/punch")]
@@ -73,7 +73,7 @@ namespace Aromato.WebApi.Controllers
         [HttpPut("{id}/contactno")]
         public dynamic ChangeContactNo(long id, [FromBody] EmployeeWebData data)
         {
-            return DoActionOrFail(() => _employeeService.ChangeContactNo(id, data.Email));
+            return DoActionOrFail(() => _employeeService.ChangeContactNo(id, data.ContactNo));
         }
 
         private RestResponse DoActionOrFail(Action action)

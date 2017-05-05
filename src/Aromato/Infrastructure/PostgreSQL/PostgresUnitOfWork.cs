@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Aromato.Infrastructure.PostgreSQL
 {
-    public class PostgresUnitOfWork : DbContext, IUnitOfWork
+    public sealed class PostgresUnitOfWork : DbContext, IUnitOfWork
     {
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -38,7 +38,6 @@ namespace Aromato.Infrastructure.PostgreSQL
                 employee.Property(e => e.Email).HasColumnName("email");
                 employee.Property(e => e.UniqueId).HasColumnName("unique_id");
                 employee.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
-
                 employee.HasMany(e => e.Punches).WithOne().HasForeignKey("employee_id");
 
                 employee.ToTable("employee");

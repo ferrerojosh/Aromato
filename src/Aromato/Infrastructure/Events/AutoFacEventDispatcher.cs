@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Reflection;
 using Aromato.Domain;
-using Aromato.Domain.Employee.Events;
-using Aromato.Infrastructure.Events.Employee;
 using Autofac;
+using Autofac.Features.Variance;
 
 namespace Aromato.Infrastructure.Events
 {
@@ -13,8 +12,14 @@ namespace Aromato.Infrastructure.Events
         public AutoFacEventDispatcher()
         {
             var builder = new ContainerBuilder();
+            var assembly = Assembly.Load(new AssemblyName("Aromato"));
 
-            builder.RegisterInstance<IDomainEventHandler<EmployeeEmailChanged>>(new EmployeeEmailChangedEventHandler());
+            builder.RegisterSource(new ContravariantRegistrationSource());
+
+            builder
+                .RegisterAssemblyTypes(assembly)
+                .AsClosedTypesOf(typeof(IDomainEventHandler<>))
+                .AsImplementedInterfaces();
 
             _container = builder.Build();
         }

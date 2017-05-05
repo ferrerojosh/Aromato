@@ -1,8 +1,8 @@
 ﻿namespace Aromato.Domain
 {
-    public interface IDomainEventHandler<in TDomainEvent>
-        where TDomainEvent : IDomainEvent
+    public interface IDomainEventHandler<in TEvent>
+        where TEvent : IDomainEvent
     {
-        void HandleEvent(TDomainEvent @event);
+        void HandleEvent(TEvent @event);
     }
 }

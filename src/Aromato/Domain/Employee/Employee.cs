@@ -4,6 +4,7 @@ using System.Linq;
 using Aromato.Domain.Employee.Events;
 using Aromato.Helpers;
 using Aromato.Infrastructure.Events;
+using Newtonsoft.Json;
 
 namespace Aromato.Domain.Employee
 {
@@ -26,7 +27,8 @@ namespace Aromato.Domain.Employee
             {
                 throw new ArgumentException("Contact number is not valid.", nameof(contactNo));
             }
-            return new Employee
+
+            var employee = new Employee
             {
                 UniqueId = uniqueId,
                 FirstName = firstName,
@@ -37,6 +39,13 @@ namespace Aromato.Domain.Employee
                 ContactNo = contactNo,
                 Email = email
             };
+
+            DomainEvent.Raise(new EmployeeCreated
+            {
+                Employee = employee
+            });
+
+            return employee;
         }
 
         public long Id { get; set; }
@@ -110,9 +119,21 @@ namespace Aromato.Domain.Employee
             {
                 throw new ArgumentException("Contact number is not valid.", nameof(newContactNo));
             }
+
+            var oldContactNo = ContactNo;
             ContactNo = newContactNo;
+
+            DomainEvent.Raise(new EmployeeContactNoChanged
+            {
+                EmployeeId = Id,
+                NewContactNo = newContactNo,
+                OldContactNo = oldContactNo
+            });
         }
 
-
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

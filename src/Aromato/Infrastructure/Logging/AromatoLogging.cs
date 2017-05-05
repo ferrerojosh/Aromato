@@ -1,22 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Aromato.Infrastructure.Logging
 {
     public class AromatoLogging
     {
-        private static ILoggerFactory _factory;
-
-        public static ILoggerFactory LoggerFactory
-        {
-            get
-            {
-                if (_factory != null) return _factory;
-                _factory = new LoggerFactory().AddNLog();
-                return _factory;
-            }
-            set => _factory = value;
-        }
+        public static ILoggerFactory LoggerFactory { get; set; }
         public static ILogger CreateLogger<T>() => LoggerFactory.CreateLogger<T>();
     }
 }

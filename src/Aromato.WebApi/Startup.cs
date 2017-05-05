@@ -1,6 +1,5 @@
 ﻿using Aromato.Application;
 using Aromato.Application.Web;
-using Aromato.Domain;
 using Aromato.Domain.Employee;
 using Aromato.Domain.Inventory;
 using Aromato.Infrastructure.Events;
@@ -11,9 +10,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
-using NLog.Web;
+using Serilog;
+using Serilog.Sinks.PostgreSQL;
 
 namespace Aromato.WebApi
 {
@@ -28,7 +26,13 @@ namespace Aromato.WebApi
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            env.ConfigureNLog("nlog.config");
+            var connectionString = Configuration.GetConnectionString("aromato");
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.PostgreSqlServer(connectionString, "logs")
+                .WriteTo.LiterateConsole()
+                .CreateLogger();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -53,16 +57,15 @@ namespace Aromato.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             // set primary logger
-            AromatoLogging.LoggerFactory = loggerFactory.AddNLog().AddConsole();
+            AromatoLogging.LoggerFactory = loggerFactory.AddSerilog();
             DomainEvent.Dispatcher = new AutoFacEventDispatcher();
 
-            LogManager.Configuration.Variables["connectionString"] = Configuration.GetConnectionString("aromato");
-
             app.UseMvc();
-            app.AddNLogWeb();
+
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
         }
 
     }

@@ -27,7 +27,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
       <Version>1.1.1</Version>
     </PackageReference>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta4" />
     <PackageReference Include="Npgsql" Version="3.2.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL">
       <Version>1.1.0</Version>

@@ -53,9 +53,6 @@ namespace Aromato.Application.Web
                 employeeWebData.ContactNo
             );
 
-            employee.ChangeEmail(employeeWebData.Email);
-            employee.ChangeContactNo(employeeWebData.ContactNo);
-
             _employeeRepository.Add(employee);
             _employeeRepository.UnitOfWork.Commit();
         }

@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using Aromato.Application;
 using Aromato.Application.Web.Data;
-using Aromato.Infrastructure.Logging;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Aromato.WebApi.Controllers
 {
@@ -13,7 +11,6 @@ namespace Aromato.WebApi.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
-        private readonly ILogger _log = AromatoLogging.CreateLogger<EmployeeController>();
 
         public EmployeeController(IEmployeeService employeeService)
         {
@@ -90,7 +87,6 @@ namespace Aromato.WebApi.Controllers
             {
                 response.Success = false;
                 response.Message = e.Message;
-                _log.LogError("Error when doing action {Exception}", e);
             }
 
             return response;

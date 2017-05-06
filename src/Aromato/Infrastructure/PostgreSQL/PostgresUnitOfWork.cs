@@ -40,6 +40,10 @@ namespace Aromato.Infrastructure.PostgreSQL
                 employee.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
                 employee.HasMany(e => e.Punches).WithOne().HasForeignKey("employee_id");
 
+                employee.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
                 employee.ToTable("employee");
             });
 
@@ -50,6 +54,10 @@ namespace Aromato.Infrastructure.PostgreSQL
                 inventory.Property(i => i.Name).HasColumnName("name");
                 inventory.Property(i => i.Description).HasColumnName("description");
                 inventory.HasMany(i => i.Items).WithOne().HasForeignKey("inventory_id");
+
+                inventory.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
 
                 inventory.ToTable("inventory");
             });
@@ -66,6 +74,10 @@ namespace Aromato.Infrastructure.PostgreSQL
                 item.Property(i => i.Name).HasColumnName("name");
                 item.Property(i => i.Description).HasColumnName("description");
 
+                item.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
                 item.ToTable("item");
             });
 
@@ -75,6 +87,11 @@ namespace Aromato.Infrastructure.PostgreSQL
                 punch.HasKey(p => p.Id);
                 punch.Property(p => p.DateAdded).HasColumnName("date_added");
                 punch.Property(p => p.Type).HasColumnName("type");
+
+                punch.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
                 punch.ToTable("punch");
             });
 
@@ -83,6 +100,10 @@ namespace Aromato.Infrastructure.PostgreSQL
                 role.Property(r => r.Id).HasColumnName("id");
                 role.HasKey(r => r.Id);
                 role.Property(r => r.Name).HasColumnName("name");
+
+                role.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
 
                 role.ToTable("role");
             });
@@ -94,6 +115,10 @@ namespace Aromato.Infrastructure.PostgreSQL
                 schedule.Property(s => s.DayOfWeek).HasColumnName("day_of_week");
                 schedule.Property(s => s.StartTime).HasColumnName("start_time");
                 schedule.Property(s => s.EndTime).HasColumnName("end_time");
+
+                schedule.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
 
                 schedule.ToTable("duty_schedule");
             });

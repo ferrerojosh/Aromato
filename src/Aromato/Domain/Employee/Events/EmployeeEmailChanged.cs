@@ -5,5 +5,7 @@
         public long EmployeeId { get; set; }
         public string OldEmail { get; set; }
         public string NewEmail { get; set; }
+
+
     }
 }

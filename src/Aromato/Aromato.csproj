@@ -21,9 +21,6 @@
       <Version>1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging">
-      <Version>1.1.1</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
       <Version>1.1.1</Version>
     </PackageReference>

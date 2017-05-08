@@ -27,9 +27,9 @@ namespace Aromato.Application.Web
             return employees.AsEnumerableData<EmployeeWebData>();
         }
 
-        public IData Punch(long id)
+        public IData Punch(string uniqueId)
         {
-            var employee = FindByIdOrFail(id);
+            var employee = _employeeRepository.FindByUniqueId(uniqueId);
             var punch = employee.DoPunch();
             _employeeRepository.UnitOfWork.Commit();
             return punch.AsData<EmployeeWebData>();
@@ -76,7 +76,7 @@ namespace Aromato.Application.Web
             var employee = _employeeRepository.FindById(id);
             if (employee == null)
             {
-                throw new InvalidOperationException($"Employee with id {id} does not exist.");
+                throw new InvalidOperationException($"Employee with uniqueId {id} does not exist.");
             }
             return employee;
         }

@@ -66,11 +66,6 @@ namespace Aromato.Infrastructure.PostgreSQL
             {
                 item.Property(i => i.Id).HasColumnName("id");
                 item.HasKey(i => i.Id);
-                item.HasAlternateKey(i => i.UniqueId);
-                item.Property(i => i.UniqueId).HasColumnName("unique_id");
-                item.Property(i => i.DateAdded).HasColumnName("date_added");
-                item.Property(i => i.LastUpdated).HasColumnName("last_updated");
-                item.Property(i => i.Status).HasColumnName("status");
                 item.Property(i => i.Name).HasColumnName("name");
                 item.Property(i => i.Description).HasColumnName("description");
 
@@ -79,6 +74,25 @@ namespace Aromato.Infrastructure.PostgreSQL
                     .IsRowVersion();
 
                 item.ToTable("item");
+            });
+
+            modelBuilder.Entity<InventoryItem>(item =>
+            {
+                item.Property(i => i.Id).HasColumnName("id");
+                item.HasKey(i => i.Id);
+                item.HasAlternateKey(i => i.UniqueId);
+                item.Property(i => i.UniqueId).HasColumnName("unique_id");
+                item.Property(i => i.DateAdded).HasColumnName("date_added");
+                item.Property(i => i.LastUpdated).HasColumnName("last_updated");
+                item.Property(i => i.Status).HasColumnName("status");
+
+                item.HasOne(i => i.Item).WithMany().HasForeignKey("item_id");
+
+                item.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
+                item.ToTable("inventory_item");
             });
 
             modelBuilder.Entity<Punch>(punch =>

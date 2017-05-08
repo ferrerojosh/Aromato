@@ -1,11 +1,4 @@
-﻿using Aromato.Application;
-using Aromato.Application.Web;
-using Aromato.Domain.Employee;
-using Aromato.Domain.Inventory;
-using Aromato.Infrastructure.Events;
-using Aromato.Infrastructure.Logging;
-using Aromato.Infrastructure.PostgreSQL;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 
-namespace Aromato.WebApi
+namespace Aromato.Auth
 {
     public class Startup
     {
@@ -26,11 +19,12 @@ namespace Aromato.WebApi
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            var connectionString = Configuration.GetConnectionString("aromato");
+            var connectionStr = Configuration.GetConnectionString("Aromato");
+            var logTable = Configuration["LogsTable"];
 
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
-                .WriteTo.PostgreSqlServer(connectionString, "logs")
+                .WriteTo.PostgreSqlServer(connectionStr, logTable)
                 .WriteTo.LiterateConsole()
                 .CreateLogger();
         }
@@ -40,33 +34,32 @@ namespace Aromato.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<PostgresUnitOfWork>();
+            // Add identity server framework
+            services.AddIdentityServer()
+                .AddTemporarySigningCredential()
+                .AddInMemoryClients(Config.AuthClients())
+                .AddInMemoryApiResources(Config.ApiResources());
 
             // Add framework services.
-            services.AddMvc(options =>
-            {
-            });
-            
-            // Register repositories.
-            services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
-            services.AddScoped<IInventoryRepository, PostgresInventoryRepository>();
-
-            // Register services.
-            services.AddScoped<IInventoryService, InventoryWebService>();
-            services.AddScoped<IEmployeeService, EmployeeWebService>();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory,
+            IApplicationLifetime appLifetime)
         {
-            // set primary logger
-            AromatoLogging.LoggerFactory = loggerFactory.AddSerilog();
-            DomainEvent.Dispatcher = new AutoFacEventDispatcher();
+            // Use serilog as logging implementation
+            loggerFactory.AddSerilog();
 
-            app.UseMvc();
-
+            // Ensure any buffered events are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
-        }
 
+            app.UseDeveloperExceptionPage();
+            app.UseIdentityServer();
+            app.UseMvc();
+        }
     }
 }

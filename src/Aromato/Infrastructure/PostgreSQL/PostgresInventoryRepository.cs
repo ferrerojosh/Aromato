@@ -19,6 +19,7 @@ namespace Aromato.Infrastructure.PostgreSQL
         {
             return _unitOfWork.Inventories
                 .Include(i => i.Items)
+                .Include("Items.Item")
                 .FirstOrDefault(i => i.Id == id);
         }
 
@@ -26,6 +27,7 @@ namespace Aromato.Infrastructure.PostgreSQL
         {
             return _unitOfWork.Inventories
                 .Include(i => i.Items)
+                .Include("Items.Item")
                 .AsEnumerable();
         }
 
@@ -33,6 +35,7 @@ namespace Aromato.Infrastructure.PostgreSQL
         {
             return _unitOfWork.Inventories
                 .Include(i => i.Items)
+                .Include("Items.Item")
                 .Where(specification.IsSatisified)
                 .AsEnumerable();
         }

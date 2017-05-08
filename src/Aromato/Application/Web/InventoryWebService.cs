@@ -29,7 +29,7 @@ namespace Aromato.Application.Web
         public IEnumerable<IData> RetrieveItemsByName(long inventoryId, string itemName)
         {
             return _inventoryRepository.FindById(inventoryId)
-                .Items.Where(i => i.Name == itemName)
+                .Items.Where(i => i.Item.Name == itemName)
                 .AsEnumerableData<ItemWebData>();
         }
 
@@ -41,10 +41,10 @@ namespace Aromato.Application.Web
 
         public void CreateInventory(IData data)
         {
-            var inventoryData = (InventoryWebData) data;
+            var inventoryData = data as InventoryWebData;
             var inventory = Inventory.Create(
-                inventoryData.Name,
-                inventoryData.Description
+                inventoryData?.Name,
+                inventoryData?.Description
             );
             _inventoryRepository.Add(inventory);
             _inventoryRepository.UnitOfWork.Commit();
@@ -52,14 +52,14 @@ namespace Aromato.Application.Web
 
         public void AddItemToInventory(long inventoryId, IData data)
         {
+            var itemData = data as ItemWebData;
             var inventory = _inventoryRepository.FindById(inventoryId);
-            var itemData = (ItemWebData) data;
+            var item = inventory.Items.FirstOrDefault(i => i.Item.Name == itemData?.Name)?.Item
+                       ?? Item.Create(itemData?.Name, itemData?.Description);
 
-            inventory.AddItemToInventory(Item.Create(
-                itemData.UniqueId,
-                itemData.Name,
-                itemData.Description
-            ));
+            var inventoryItem = InventoryItem.Create(itemData?.UniqueId, item);
+            inventory.Items.Add(inventoryItem);
+
             _inventoryRepository.UnitOfWork.Commit();
         }
     }

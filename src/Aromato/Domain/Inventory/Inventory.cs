@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Aromato.Domain.Inventory
 {
@@ -25,26 +25,6 @@ namespace Aromato.Domain.Inventory
 
         public virtual string Name { get; private set; }
         public virtual string Description { get; private set; }
-        public virtual List<Item> Items { get; } = new List<Item>();
-
-        public virtual void AddItemToInventory(Item item)
-        {
-            Items.Add(item);
-        }
-
-        public virtual void RemoveItemFromInventory(Item item)
-        {
-            Items.Remove(item);
-        }
-
-        public virtual int RetrieveItemQuantity(string itemName)
-        {
-            return Items.Count(item => item.Name == itemName);
-        }
-
-        public virtual IEnumerable<Item> RetrieveItemsWithStatus(ItemStatus status)
-        {
-            return Items.Where(item => item.Status == status).AsEnumerable();
-        }
+        public virtual List<InventoryItem> Items { get; } = new List<InventoryItem>();
     }
 }

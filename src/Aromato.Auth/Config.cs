@@ -41,7 +41,7 @@ namespace Aromato.Auth
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = { "inventory.read", "employee.read" },
+                    AllowedScopes = { "inventory.read", "inventory.write", "employee.read" },
                     AllowedCorsOrigins = { "http://localhost/"}
                 }
             };

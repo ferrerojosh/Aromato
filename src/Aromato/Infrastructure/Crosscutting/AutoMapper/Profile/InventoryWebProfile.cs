@@ -1,5 +1,5 @@
 ﻿using Aromato.Application.Web.Data;
-using Aromato.Domain.Inventory;
+using Aromato.Domain.InventoryAgg;
 using Aromato.Infrastructure.Crosscutting.Extension;
 
 namespace Aromato.Infrastructure.Crosscutting.AutoMapper.Profile

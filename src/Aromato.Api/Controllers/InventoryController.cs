@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aromato.Api.Controllers
 {
+    [Authorize(Roles = "sysad,wscholar")]
     [Produces("application/json")]
     [Route("api/inventory")]
-    public class InventoryController : Controller
+    public class InventoryController : ControllerBase
     {
 
         private readonly IInventoryService _inventoryService;
@@ -19,28 +20,24 @@ namespace Aromato.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize("inventory.read")]
         public IEnumerable<IData> Index()
         {
             return _inventoryService.RetrieveAll();
         }
 
         [HttpGet("{id}")]
-        [Authorize("inventory.read")]
         public IData Get(long id)
         {
             return _inventoryService.RetrieveById(id);
         }
 
         [HttpPost]
-        [Authorize("inventory.write")]
         public void Create([FromBody] InventoryWebData value)
         {
             _inventoryService.CreateInventory(value);
         }
 
         [HttpPut("{id}/item")]
-        [Authorize("inventory.write")]
         public void AddItem(long id, [FromBody] ItemWebData item)
         {
             _inventoryService.AddItemToInventory(id, item);

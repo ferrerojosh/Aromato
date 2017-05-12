@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Aromato.Domain.Inventory;
+using Aromato.Domain.InventoryAgg;
 using Xunit;
 
 namespace Aromato.Test.Domain.Inventory
@@ -8,9 +8,9 @@ namespace Aromato.Test.Domain.Inventory
     public class InventoryTest
     {
 
-        public Aromato.Domain.Inventory.Inventory TestInventory()
+        public Aromato.Domain.InventoryAgg.Inventory TestInventory()
         {
-            return Aromato.Domain.Inventory.Inventory.Create("Sample Inventory", "This is a sample inventory.");
+            return Aromato.Domain.InventoryAgg.Inventory.Create("Sample Inventory", "This is a sample inventory.");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Aromato.Domain.Inventory
+namespace Aromato.Domain.InventoryAgg
 {
     public class Inventory : IAggregateRoot<long>
     {

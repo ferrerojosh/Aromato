@@ -1,4 +1,4 @@
-﻿namespace Aromato.Domain.Inventory
+﻿namespace Aromato.Domain.InventoryAgg
 {
     public enum ItemStatus
     {

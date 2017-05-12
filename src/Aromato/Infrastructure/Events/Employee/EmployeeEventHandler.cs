@@ -1,5 +1,5 @@
 ﻿using Aromato.Domain;
-using Aromato.Domain.Employee.Events;
+using Aromato.Domain.EmployeeAgg.Events;
 using Aromato.Infrastructure.Logging;
 using Microsoft.Extensions.Logging;
 

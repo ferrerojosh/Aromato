@@ -1,5 +1,5 @@
 ﻿using Aromato.Application.Web.Data;
-using Aromato.Domain.Employee;
+using Aromato.Domain.EmployeeAgg;
 
 namespace Aromato.Infrastructure.Crosscutting.AutoMapper.Profile
 {

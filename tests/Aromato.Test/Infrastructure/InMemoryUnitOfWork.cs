@@ -1,6 +1,6 @@
 ﻿using Aromato.Domain;
-using Aromato.Domain.Employee;
-using Aromato.Domain.Inventory;
+using Aromato.Domain.EmployeeAgg;
+using Aromato.Domain.InventoryAgg;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Test.Infrastructure

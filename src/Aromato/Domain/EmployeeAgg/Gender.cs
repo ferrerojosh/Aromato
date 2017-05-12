@@ -1,4 +1,4 @@
-﻿namespace Aromato.Domain.Employee
+﻿namespace Aromato.Domain.EmployeeAgg
 {
     public enum Gender
     {

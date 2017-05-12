@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aromato.Domain.Inventory
+namespace Aromato.Domain.InventoryAgg
 {
     public class Item : IEntity<long>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aromato.Domain.Employee
+namespace Aromato.Domain.EmployeeAgg
 {
     public class DutySchedule : IEntity<long>
     {

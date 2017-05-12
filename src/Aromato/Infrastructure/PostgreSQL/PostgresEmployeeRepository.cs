@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aromato.Domain;
-using Aromato.Domain.Employee;
+using Aromato.Domain.EmployeeAgg;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Infrastructure.PostgreSQL
@@ -38,11 +38,6 @@ namespace Aromato.Infrastructure.PostgreSQL
         public void Add(Employee aggregate)
         {
             _unitOfWork.Employees.Add(aggregate);
-        }
-
-        public void Modify(Employee aggregate)
-        {
-            _unitOfWork.Entry(aggregate).State = EntityState.Modified;
         }
 
         public void Remove(Employee aggregate)

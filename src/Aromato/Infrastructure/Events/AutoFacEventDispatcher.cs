@@ -12,7 +12,7 @@ namespace Aromato.Infrastructure.Events
         public AutoFacEventDispatcher()
         {
             var builder = new ContainerBuilder();
-            var assembly = Assembly.Load(new AssemblyName("Aromato"));
+            var assembly = typeof(AutoFacEventDispatcher).GetTypeInfo().Assembly;
 
             builder.RegisterSource(new ContravariantRegistrationSource());
 

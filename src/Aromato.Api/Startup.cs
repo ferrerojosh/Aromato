@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Aromato.Application;
+﻿using Aromato.Application;
 using Aromato.Application.Web;
-using Aromato.Domain.Employee;
-using Aromato.Domain.Inventory;
+using Aromato.Domain.EmployeeAgg;
+using Aromato.Domain.InventoryAgg;
 using Aromato.Infrastructure;
 using Aromato.Infrastructure.Events;
 using Aromato.Infrastructure.PostgreSQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,19 +42,10 @@ namespace Aromato.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            var scopes = new List<string>()
+            services.AddDbContext<PostgresUnitOfWork>(options =>
             {
-                "employee.read", "employee.write",
-                "inventory.read", "inventory.write",
-            };
-
-            services.AddAuthorization(options =>
-            {
-                scopes.ForEach(scope => options.AddPolicy(scope, policy => policy.RequireClaim("scope", scope)));
+                options.UseNpgsql(Configuration.GetConnectionString("Aromato"));
             });
-
-            services.AddDbContext<PostgresUnitOfWork>();
 
             services.AddScoped<IEmployeeService, EmployeeWebService>();
             services.AddScoped<IInventoryService, InventoryWebService>();
@@ -78,13 +69,13 @@ namespace Aromato.Api
             // Ensure any buffered events are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
-                Authority = "http://localhost:5000",
-                RequireHttpsMetadata = false,
-                ApiName = "aromato",
+                Audience = "http://localhost:5001/",
+                Authority = "http://localhost:5000/",
                 AutomaticAuthenticate = true,
-                AutomaticChallenge = true
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
             });
 
             app.UseAromato(loggerFactory, new AutoFacEventDispatcher());

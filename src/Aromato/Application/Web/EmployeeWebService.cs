@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Aromato.Application.Web.Data;
-using Aromato.Domain.Employee;
+using Aromato.Domain.EmployeeAgg;
 using Aromato.Infrastructure.Crosscutting.Extension;
 
 namespace Aromato.Application.Web
@@ -32,7 +32,7 @@ namespace Aromato.Application.Web
             var employee = _employeeRepository.FindByUniqueId(uniqueId);
             var punch = employee.DoPunch();
             _employeeRepository.UnitOfWork.Commit();
-            return punch.AsData<EmployeeWebData>();
+            return punch.AsData<PunchWebData>();
         }
 
         public void CreateEmployee(IData employeeData)
@@ -76,7 +76,7 @@ namespace Aromato.Application.Web
             var employee = _employeeRepository.FindById(id);
             if (employee == null)
             {
-                throw new InvalidOperationException($"Employee with uniqueId {id} does not exist.");
+                throw new InvalidOperationException($"Employee with id {id} does not exist.");
             }
             return employee;
         }

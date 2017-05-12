@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aromato.Domain;
-using Aromato.Domain.Employee;
+using Aromato.Domain.EmployeeAgg;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Test.Infrastructure

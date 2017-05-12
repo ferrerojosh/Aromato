@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aromato.Domain.Employee.Events;
+using Aromato.Domain.EmployeeAgg.Events;
+using Aromato.Domain.RoleAgg;
 using Aromato.Helpers;
 using Aromato.Infrastructure.Events;
 using Newtonsoft.Json;
 
-namespace Aromato.Domain.Employee
+namespace Aromato.Domain.EmployeeAgg
 {
     public class Employee : IAggregateRoot<long>
     {
@@ -50,22 +51,17 @@ namespace Aromato.Domain.Employee
 
         public long Id { get; set; }
         public virtual string UniqueId { get; protected set;}
-        public virtual string FirstName { get; protected  set; }
-        public virtual string LastName { get; protected  set;}
+        public virtual string FirstName { get; protected set; }
+        public virtual string LastName { get; protected set;}
         public virtual string MiddleName { get; protected  set; }
         public virtual string Name => $"{LastName}, {FirstName} {MiddleName}";
         public virtual string ContactNo { get; private set; }
         public virtual string Email { get; private set; }
         public virtual Gender Gender { get; protected set; }
         public virtual DateTime DateOfBirth { get; protected set; }
-        public virtual IList<Role> Roles { get; } = new List<Role>();
         public virtual IList<DutySchedule> DutySchedules { get; } = new List<DutySchedule>();
         public virtual IList<Punch> Punches { get; } = new List<Punch>();
-
-        public virtual void AddRole(Role role)
-        {
-            Roles.Add(role);
-        }
+        public virtual IList<EmployeeRole> Roles { get; } = new List<EmployeeRole>();
 
         public virtual void AddSchedule(DutySchedule dutySchedule)
         {
@@ -81,7 +77,9 @@ namespace Aromato.Domain.Employee
             }
             else
             {
-                var lastPunch = Punches.Last(p => p.DateAdded.Date == DateTime.Now.Date);
+                var lastPunch = Punches
+                    .OrderByDescending(p => p.DateAdded)
+                    .Last(p => p.DateAdded.Date == DateTime.Now.Date);
 
                 if (lastPunch.DateAdded.Minute == DateTime.Now.Minute)
                 {

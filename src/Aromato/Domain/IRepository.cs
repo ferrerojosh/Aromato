@@ -35,11 +35,6 @@ namespace Aromato.Domain
         /// <param name="aggregate">The aggregate.</param>
         void Add(TAggregate aggregate);
         /// <summary>
-        /// Modify the state of an existing aggregate in this repository.
-        /// </summary>
-        /// <param name="aggregate">The modified aggregate.</param>
-        void Modify(TAggregate aggregate);
-        /// <summary>
         /// Remove an aggregate in this repository.
         /// </summary>
         /// <param name="aggregate">The aggregate to remove.</param>

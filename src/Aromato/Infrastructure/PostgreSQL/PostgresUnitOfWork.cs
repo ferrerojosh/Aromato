@@ -1,9 +1,9 @@
-﻿using System.IO;
-using Aromato.Domain;
-using Aromato.Domain.Employee;
-using Aromato.Domain.Inventory;
+﻿using Aromato.Domain;
+using Aromato.Domain.CredentialAgg;
+using Aromato.Domain.EmployeeAgg;
+using Aromato.Domain.InventoryAgg;
+using Aromato.Domain.RoleAgg;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Aromato.Infrastructure.PostgreSQL
 {
@@ -11,20 +11,85 @@ namespace Aromato.Infrastructure.PostgreSQL
     {
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Credential> Credentials { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public PostgresUnitOfWork()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
+        }
 
-            var config = builder.Build();
-
-            optionsBuilder.UseNpgsql(config.GetConnectionString("aromato"));
+        public PostgresUnitOfWork(DbContextOptions<PostgresUnitOfWork> options) : base(options)
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Credential>(cred =>
+            {
+                cred.Property(e => e.Id).HasColumnName("id");
+                cred.HasKey(e => e.Id);
+
+                cred.Property(e => e.Username).HasColumnName("username");
+                cred.Property(e => e.Password).HasColumnName("password");
+
+                cred.HasOne(e => e.Employee).WithMany().HasForeignKey("employee_id");
+
+                cred.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
+                cred.ToTable("credential");
+            });
+
+            modelBuilder.Entity<Role>(role =>
+            {
+                role.Property(e => e.Id).HasColumnName("id");
+                role.HasKey(e => e.Id);
+
+                role.Property(i => i.Name).HasColumnName("name");
+                role.Property(i => i.Description).HasColumnName("description");
+                role.HasMany(i => i.Permissions).WithOne().HasForeignKey("role_id");
+                role.HasMany(i => i.Employees).WithOne().HasForeignKey("role_id");
+
+                role.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
+                role.ToTable("role");
+            });
+
+            modelBuilder.Entity<Permission>(perm =>
+            {
+                perm.Property(e => e.Id).HasColumnName("id");
+                perm.HasKey(e => e.Id);
+
+                perm.Property(i => i.Name).HasColumnName("name");
+                perm.Property(i => i.Description).HasColumnName("description");
+                perm.HasMany(i => i.Roles).WithOne().HasForeignKey("permission_id");
+
+                perm.ToTable("permission");
+            });
+
+            modelBuilder.Entity<RolePermission>(rolePerm =>
+            {
+                rolePerm.Property<long>("permission_id");
+                rolePerm.Property<long>("role_id");
+                rolePerm.HasKey("role_id", "permission_id");
+
+                rolePerm.HasOne(role => role.Role)
+                    .WithMany(e => e.Permissions)
+                    .HasForeignKey("role_id");
+
+                rolePerm.HasOne(perm => perm.Permission)
+                    .WithMany(e => e.Roles)
+                    .HasForeignKey("permission_id");
+
+                rolePerm.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
+                rolePerm.ToTable("role_permission");
+            });
+
             modelBuilder.Entity<Employee>(employee =>
             {
                 employee.Property(e => e.Id).HasColumnName("id");
@@ -39,12 +104,35 @@ namespace Aromato.Infrastructure.PostgreSQL
                 employee.Property(e => e.UniqueId).HasColumnName("unique_id");
                 employee.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
                 employee.HasMany(e => e.Punches).WithOne().HasForeignKey("employee_id");
+                employee.HasMany(e => e.Roles).WithOne().HasForeignKey("employee_id");
 
                 employee.Property<uint>("xmin")
                     .HasColumnType("xid")
                     .IsRowVersion();
 
                 employee.ToTable("employee");
+            });
+
+            modelBuilder.Entity<EmployeeRole>(empRole =>
+            {
+                empRole.Property<long>("employee_id");
+                empRole.Property<long>("role_id");
+
+                empRole.HasKey("employee_id", "role_id");
+
+                empRole.HasOne(role => role.Role)
+                    .WithMany(e => e.Employees)
+                    .HasForeignKey("role_id");
+
+                empRole.HasOne(perm => perm.Employee)
+                    .WithMany(e => e.Roles)
+                    .HasForeignKey("employee_id");
+
+                empRole.Property<uint>("xmin")
+                    .HasColumnType("xid")
+                    .IsRowVersion();
+
+                empRole.ToTable("employee_role");
             });
 
             modelBuilder.Entity<Inventory>(inventory =>
@@ -107,19 +195,6 @@ namespace Aromato.Infrastructure.PostgreSQL
                     .IsRowVersion();
 
                 punch.ToTable("punch");
-            });
-
-            modelBuilder.Entity<Role>(role =>
-            {
-                role.Property(r => r.Id).HasColumnName("id");
-                role.HasKey(r => r.Id);
-                role.Property(r => r.Name).HasColumnName("name");
-
-                role.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
-
-                role.ToTable("role");
             });
 
             modelBuilder.Entity<DutySchedule>(schedule =>

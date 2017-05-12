@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aromato.Domain;
-using Aromato.Domain.Inventory;
+using Aromato.Domain.InventoryAgg;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aromato.Test.Infrastructure

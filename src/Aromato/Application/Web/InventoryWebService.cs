@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Aromato.Application.Web.Data;
-using Aromato.Domain.Inventory;
+using Aromato.Domain.InventoryAgg;
 using Aromato.Infrastructure.Crosscutting.Extension;
 
 namespace Aromato.Application.Web

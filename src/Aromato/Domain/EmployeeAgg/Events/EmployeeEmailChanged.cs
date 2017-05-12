@@ -1,4 +1,4 @@
-﻿namespace Aromato.Domain.Employee.Events
+﻿namespace Aromato.Domain.EmployeeAgg.Events
 {
     public class EmployeeEmailChanged : IDomainEvent
     {

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Aromato.Auth
@@ -9,6 +10,7 @@ namespace Aromato.Auth
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseUrls("https://localhost:5000")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

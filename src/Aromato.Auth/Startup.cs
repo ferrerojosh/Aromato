@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Aromato.Infrastructure.PostgreSQL;
@@ -87,15 +90,16 @@ namespace Aromato.Auth
                 // You can generate a self-signed certificate using Pluralsight's self-cert utility:
                 // https://s3.amazonaws.com/pluralsight-free/keith-brown/samples/SelfCert.zip
                 //
-                // options.AddSigningCertificate("7D2A741FE34CC2C7369237A5F2078988E17A6A75");
+                // options.AddSigningCertificate("8AEDD04D044891326BA935EA65D9819B0E887E8F");
                 //
                 // Alternatively, you can also store the certificate as an embedded .pfx resource
                 // directly in this assembly or in a file published alongside this project:
                 //
-                // options.AddSigningCertificate(
-                //     assembly: typeof(Startup).GetTypeInfo().Assembly,
-                //     resource: "AuthorizationServer.Certificate.pfx",
-                //     password: "OpenIddict");
+                //options.AddSigningCertificate(
+                //   assembly: typeof(Startup).GetTypeInfo().Assembly,
+                //   resource: "aromato.dev.pfx",
+                //   password: "developer");
+
                 options.UseJsonWebTokens();
 
                 // During development, you can disable the HTTPS requirement.
@@ -107,6 +111,7 @@ namespace Aromato.Auth
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddSerilog();
+
             // Register the OpenIddict middleware.
             app.UseOpenIddict();
             app.UseMvcWithDefaultRoute();

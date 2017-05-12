@@ -12,6 +12,8 @@ namespace Aromato.Infrastructure.PostgreSQL
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Credential> Credentials { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         public PostgresUnitOfWork()
         {
@@ -33,9 +35,7 @@ namespace Aromato.Infrastructure.PostgreSQL
 
                 cred.HasOne(e => e.Employee).WithMany().HasForeignKey("employee_id");
 
-                cred.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                cred.ForNpgsqlUseXminAsConcurrencyToken();
 
                 cred.ToTable("credential");
             });
@@ -50,9 +50,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                 role.HasMany(i => i.Permissions).WithOne().HasForeignKey("role_id");
                 role.HasMany(i => i.Employees).WithOne().HasForeignKey("role_id");
 
-                role.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                role.ForNpgsqlUseXminAsConcurrencyToken();
 
                 role.ToTable("role");
             });
@@ -66,13 +64,15 @@ namespace Aromato.Infrastructure.PostgreSQL
                 perm.Property(i => i.Description).HasColumnName("description");
                 perm.HasMany(i => i.Roles).WithOne().HasForeignKey("permission_id");
 
+                perm.ForNpgsqlUseXminAsConcurrencyToken();
+
                 perm.ToTable("permission");
             });
 
             modelBuilder.Entity<RolePermission>(rolePerm =>
             {
-                rolePerm.Property<long>("permission_id");
-                rolePerm.Property<long>("role_id");
+                rolePerm.Property<long>("permission_id").UseNpgsqlSerialColumn();
+                rolePerm.Property<long>("role_id").UseNpgsqlSerialColumn();
                 rolePerm.HasKey("role_id", "permission_id");
 
                 rolePerm.HasOne(role => role.Role)
@@ -83,9 +83,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                     .WithMany(e => e.Roles)
                     .HasForeignKey("permission_id");
 
-                rolePerm.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                rolePerm.ForNpgsqlUseXminAsConcurrencyToken();
 
                 rolePerm.ToTable("role_permission");
             });
@@ -106,17 +104,15 @@ namespace Aromato.Infrastructure.PostgreSQL
                 employee.HasMany(e => e.Punches).WithOne().HasForeignKey("employee_id");
                 employee.HasMany(e => e.Roles).WithOne().HasForeignKey("employee_id");
 
-                employee.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                employee.ForNpgsqlUseXminAsConcurrencyToken();
 
                 employee.ToTable("employee");
             });
 
             modelBuilder.Entity<EmployeeRole>(empRole =>
             {
-                empRole.Property<long>("employee_id");
-                empRole.Property<long>("role_id");
+                empRole.Property<long>("employee_id").UseNpgsqlSerialColumn();
+                empRole.Property<long>("role_id").UseNpgsqlSerialColumn();
 
                 empRole.HasKey("employee_id", "role_id");
 
@@ -128,9 +124,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                     .WithMany(e => e.Roles)
                     .HasForeignKey("employee_id");
 
-                empRole.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                empRole.ForNpgsqlUseXminAsConcurrencyToken();
 
                 empRole.ToTable("employee_role");
             });
@@ -143,9 +137,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                 inventory.Property(i => i.Description).HasColumnName("description");
                 inventory.HasMany(i => i.Items).WithOne().HasForeignKey("inventory_id");
 
-                inventory.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                inventory.ForNpgsqlUseXminAsConcurrencyToken();
 
                 inventory.ToTable("inventory");
             });
@@ -157,9 +149,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                 item.Property(i => i.Name).HasColumnName("name");
                 item.Property(i => i.Description).HasColumnName("description");
 
-                item.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                item.ForNpgsqlUseXminAsConcurrencyToken();
 
                 item.ToTable("item");
             });
@@ -176,9 +166,7 @@ namespace Aromato.Infrastructure.PostgreSQL
 
                 item.HasOne(i => i.Item).WithMany().HasForeignKey("item_id");
 
-                item.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                item.ForNpgsqlUseXminAsConcurrencyToken();
 
                 item.ToTable("inventory_item");
             });
@@ -190,9 +178,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                 punch.Property(p => p.DateAdded).HasColumnName("date_added");
                 punch.Property(p => p.Type).HasColumnName("type");
 
-                punch.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                punch.ForNpgsqlUseXminAsConcurrencyToken();
 
                 punch.ToTable("punch");
             });
@@ -205,9 +191,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                 schedule.Property(s => s.StartTime).HasColumnName("start_time");
                 schedule.Property(s => s.EndTime).HasColumnName("end_time");
 
-                schedule.Property<uint>("xmin")
-                    .HasColumnType("xid")
-                    .IsRowVersion();
+                schedule.ForNpgsqlUseXminAsConcurrencyToken();
 
                 schedule.ToTable("duty_schedule");
             });

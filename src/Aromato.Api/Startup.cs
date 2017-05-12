@@ -1,4 +1,7 @@
-﻿using Aromato.Application;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Threading.Tasks;
+using Aromato.Application;
 using Aromato.Application.Web;
 using Aromato.Domain.EmployeeAgg;
 using Aromato.Domain.InventoryAgg;
@@ -53,7 +56,38 @@ namespace Aromato.Api
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
             services.AddScoped<IInventoryRepository, PostgresInventoryRepository>();
 
+            InitializePolicies(services);
+
             services.AddMvc();
+        }
+
+        private void InitializePolicies(IServiceCollection services)
+        {
+            var scopeFactory = services
+                .BuildServiceProvider()
+                .GetRequiredService<IServiceScopeFactory>();
+
+            services.AddAuthorization(options =>
+            {
+                using (var scope = scopeFactory.CreateScope())
+                {
+                    var provider = scope.ServiceProvider;
+                    using (var dbContext = provider.GetRequiredService<PostgresUnitOfWork>())
+                    {
+                        var permissions = dbContext.Permissions
+                            .Include("Roles.Role")
+                            .AsEnumerable();
+
+                        foreach(var permission in permissions)
+                        {
+                            options.AddPolicy(permission.Name, policy =>
+                            {
+                                policy.RequireRole(permission.Roles.Select(r => r.Role.Name));
+                            });
+                        }
+                    }
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,13 +103,18 @@ namespace Aromato.Api
             // Ensure any buffered events are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
+            // Disable the automatic JWT -> WS-Federation claims mapping used by the JWT middleware:
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+            // Authenticate users on a separate server
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
-                Audience = "http://localhost:5001/",
+                Audience = "aromato",
                 Authority = "http://localhost:5000/",
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                RequireHttpsMetadata = false,
+                RequireHttpsMetadata = false
             });
 
             app.UseAromato(loggerFactory, new AutoFacEventDispatcher());

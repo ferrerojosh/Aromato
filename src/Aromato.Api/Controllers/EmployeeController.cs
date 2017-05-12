@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aromato.Api.Controllers
 {
-    [Authorize(Roles = "sysad")]
     [Produces("application/json")]
     [Route("api/employee")]
     public class EmployeeController : ControllerBase
@@ -19,30 +18,35 @@ namespace Aromato.Api.Controllers
             _employeeService = employeeService;
         }
 
+        [Authorize("employee.read")]
         [HttpGet]
         public IEnumerable<IData> Index()
         {
             return _employeeService.RetrieveAll();
         }
 
+        [Authorize("employee.read")]
         [HttpGet("{id}")]
         public IData Get(long id)
         {
             return _employeeService.RetrieveById(id);
         }
 
+        [Authorize("employee.write")]
         [HttpPost]
         public void Create([FromBody] EmployeeWebData data)
         {
             _employeeService.CreateEmployee(data);
         }
 
+        [Authorize("employee.modify")]
         [HttpPut("{id}/email")]
         public void ChangeEmail(long id, [FromBody] EmployeeWebData data)
         {
             _employeeService.ChangeEmail(id, data.Email);
         }
 
+        [Authorize("employee.modify")]
         [HttpPut("{id}/contact_no")]
         public void ChangeContactNo(long id, [FromBody] EmployeeWebData data)
         {

@@ -71,6 +71,15 @@ namespace Aromato.Application.Web
             _employeeRepository.UnitOfWork.Commit();
         }
 
+        public IData RetrieveByUniqueId(string uniqueId)
+        {
+            var employee = _employeeRepository.FindByUniqueId(uniqueId);
+            if(employee == null)
+                throw new InvalidOperationException($"Employee with unique id {uniqueId} does not exist.");
+
+            return employee.AsData<EmployeeWebData>();
+        }
+
         private Employee FindByIdOrFail(long id)
         {
             var employee = _employeeRepository.FindById(id);

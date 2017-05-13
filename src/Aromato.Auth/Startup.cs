@@ -1,19 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.IdentityModel.Tokens.Jwt;
 using Aromato.Infrastructure.PostgreSQL;
-using CryptoHelper;
+using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using OpenIddict.Core;
-using OpenIddict.Models;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 
@@ -65,7 +59,6 @@ namespace Aromato.Auth
 
             services.AddOpenIddict(options =>
             {
-                // Register the Entity Framework stores.
                 options.AddEntityFrameworkCoreStores<DbContext>();
                 // Register the ASP.NET Core MVC binder used by OpenIddict.
                 // Note: if you don't call this method, you won't be able to
@@ -111,6 +104,25 @@ namespace Aromato.Auth
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddSerilog();
+
+            // Disable the automatic JWT -> WS-Federation claims mapping used by the JWT middleware:
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+            // Authenticate users on a separate server
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                Audience = "aromato",
+                Authority = "http://localhost:5000/",
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = OpenIdConnectConstants.Claims.Name,
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                }
+            });
 
             // Register the OpenIddict middleware.
             app.UseOpenIddict();

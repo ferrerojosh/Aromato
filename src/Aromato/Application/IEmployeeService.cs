@@ -6,5 +6,6 @@
         void CreateEmployee(IData employeeData);
         void ChangeEmail(long id, string email);
         void ChangeContactNo(long id, string contactNo);
+        IData RetrieveByUniqueId(string uniqueId);
     }
 }

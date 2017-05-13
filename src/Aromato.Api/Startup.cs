@@ -8,12 +8,14 @@ using Aromato.Domain.InventoryAgg;
 using Aromato.Infrastructure;
 using Aromato.Infrastructure.Events;
 using Aromato.Infrastructure.PostgreSQL;
+using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 
@@ -82,7 +84,7 @@ namespace Aromato.Api
                         {
                             options.AddPolicy(permission.Name, policy =>
                             {
-                                policy.RequireRole(permission.Roles.Select(r => r.Role.Name));
+                                policy.RequireClaim(OpenIdConnectConstants.Claims.Scope, permission.Name);
                             });
                         }
                     }
@@ -114,7 +116,12 @@ namespace Aromato.Api
                 Authority = "http://localhost:5000/",
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                RequireHttpsMetadata = false
+                RequireHttpsMetadata = false,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = OpenIdConnectConstants.Claims.Name,
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                }
             });
 
             app.UseAromato(loggerFactory, new AutoFacEventDispatcher());

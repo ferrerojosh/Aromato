@@ -20,6 +20,7 @@ namespace Aromato.Infrastructure.PostgreSQL
         {
             return _unitOfWork.Employees
                 .Include(e => e.Punches)
+                .Include("Roles.Role.Permissions.Permission")
                 .FirstOrDefault(e => e.Id == id);
         }
 
@@ -31,6 +32,7 @@ namespace Aromato.Infrastructure.PostgreSQL
         public IEnumerable<Employee> FindBySpec(ISpecification<long, Employee> specification)
         {
             return _unitOfWork.Employees
+                .Include(e => e.Punches)
                 .Where(specification.IsSatisified)
                 .AsEnumerable();
         }
@@ -54,7 +56,10 @@ namespace Aromato.Infrastructure.PostgreSQL
 
         public Employee FindByUniqueId(string uniqueId)
         {
-            return _unitOfWork.Employees.First(e => e.UniqueId == uniqueId);
+            return _unitOfWork.Employees
+                .Include(e => e.Punches)
+                .Include("Roles.Role.Permissions.Permission")
+                .First(e => e.UniqueId == uniqueId);
         }
     }
 }

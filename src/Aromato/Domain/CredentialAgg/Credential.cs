@@ -9,5 +9,10 @@ namespace Aromato.Domain.CredentialAgg
         public virtual string Username { get; protected set; }
         public virtual string Password { get; protected set; }
         public virtual Employee Employee { get; protected set; }
+
+        public void ChangePassword(string password)
+        {
+            Password = password;
+        }
     }
 }

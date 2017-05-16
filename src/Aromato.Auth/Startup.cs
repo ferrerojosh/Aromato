@@ -1,4 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Threading;
+using System.Threading.Tasks;
 using Aromato.Infrastructure.PostgreSQL;
 using AspNet.Security.OpenIdConnect.Primitives;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using OpenIddict.Core;
+using OpenIddict.Models;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 
@@ -42,6 +47,11 @@ namespace Aromato.Auth
             // Add framework services.
             services.AddMvc();
 
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
+
             services.AddDbContext<PostgresUnitOfWork>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("Aromato"));
@@ -73,6 +83,7 @@ namespace Aromato.Auth
 
                 // Enable the password flow.
                 options.AllowPasswordFlow();
+                options.AllowRefreshTokenFlow();
 
                 // Register a new ephemeral key, that is discarded when the application
                 // shuts down. Tokens signed using this key are automatically invalidated.
@@ -105,6 +116,13 @@ namespace Aromato.Auth
         {
             loggerFactory.AddSerilog();
 
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins("http://localhost:4200");
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+            });
+
             // Disable the automatic JWT -> WS-Federation claims mapping used by the JWT middleware:
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
@@ -117,6 +135,8 @@ namespace Aromato.Auth
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 RequireHttpsMetadata = false,
+
+                // Map validation parameters to OpenId standard
                 TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = OpenIdConnectConstants.Claims.Name,
@@ -127,6 +147,33 @@ namespace Aromato.Auth
             // Register the OpenIddict middleware.
             app.UseOpenIddict();
             app.UseMvcWithDefaultRoute();
+
+            InitializeAsync(app, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
+        private async Task InitializeAsync(IApplicationBuilder app, CancellationToken cancellationToken)
+        {
+            // Create a new service scope to ensure the database context is correctly disposed when this methods returns.
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<DbContext>();
+                await context.Database.EnsureCreatedAsync();
+
+                // Note: when using a custom entity or a custom key type, replace OpenIddictApplication by the appropriate type.
+                var manager = scope.ServiceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictApplication>>();
+
+                if (await manager.FindByClientIdAsync("aromato-web", cancellationToken) == null)
+                {
+                    var application = new OpenIddictApplication
+                    {
+                        ClientId = "aromato-web",
+                        RedirectUri = "http://localhost:4200/",
+                        LogoutRedirectUri = "http://localhost:4200/"
+                    };
+
+                    await manager.CreateAsync(application, cancellationToken);
+                }
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Aromato.Infrastructure.PostgreSQL;
@@ -22,6 +23,14 @@ namespace Aromato.Auth.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet("~/connect/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            // Returning a SignOutResult will ask OpenIddict to redirect the user agent
+            // to the post_logout_redirect_uri specified by the client application.
+            return SignOut(OpenIdConnectServerDefaults.AuthenticationScheme);
+        }
+
         [HttpPost("~/connect/token"), Produces("application/json")]
         public async Task<IActionResult> Exchange(OpenIdConnectRequest request)
         {
@@ -33,21 +42,8 @@ namespace Aromato.Auth.Controllers
 
                 if (credentials == null)
                 {
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "Username/password is invalid."
-                    });
+                    return Forbid(OpenIdConnectServerDefaults.AuthenticationScheme);
                 }
-
-                var requestedRole = (string) request.GetParameter("role");
-
-                if (string.IsNullOrEmpty(requestedRole))
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidRequest,
-                        ErrorDescription = "Please specify role to invoke."
-                    });
 
                 if (!BCrypt.Net.BCrypt.Verify(request.Password, credentials.Password))
                     return Forbid(OpenIdConnectServerDefaults.AuthenticationScheme);
@@ -62,69 +58,64 @@ namespace Aromato.Auth.Controllers
                 // the "access_token" destination to allow OpenIddict to store it
                 // in the access token, so it can be retrieved from your controllers.
 
-                identity.AddClaim(OpenIdConnectConstants.Claims.Subject, credentials.Employee.UniqueId);
-                identity.AddClaim(OpenIdConnectConstants.Claims.Name, credentials.Employee.Name);
-
-                var empRole = credentials.Employee.Roles.FirstOrDefault(r => r.Role.Name == requestedRole);
-
-                if (empRole == null)
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "User does not have that role."
-                    });
-
-                var role = empRole.Role;
-
-                identity.AddClaim(OpenIdConnectConstants.Claims.Role, role.Name);
-
-                foreach (var rolePerm in role.Permissions)
-                {
-                    var perm = rolePerm.Permission;
-                    identity.AddClaim(OpenIdConnectConstants.Claims.Scope, perm.Name);
-                }
-
-                // Add roles and permissions
-//            foreach(var empRole in credentials.Employee.Roles)
-//            {
-//                var role = empRole.Role;
-//                identity.AddClaim(OpenIdConnectConstants.Claims.Role, role.Name);
-//
-//                foreach(var rolePerm in role.Permissions)
-//                {
-//                    var perm = rolePerm.Permission;
-//                    identity.AddClaim(OpenIdConnectConstants.Claims.Scope, perm.Name);
-//                }
-//            }
+                identity.AddClaim(OpenIdConnectConstants.Claims.Username, credentials.Username,
+                    OpenIdConnectConstants.Destinations.IdentityToken,
+                    OpenIdConnectConstants.Destinations.AccessToken);
+                identity.AddClaim(OpenIdConnectConstants.Claims.Subject, credentials.Employee.UniqueId, OpenIdConnectConstants.Destinations.IdentityToken);
+                identity.AddClaim(OpenIdConnectConstants.Claims.Name, credentials.Employee.Name, OpenIdConnectConstants.Destinations.IdentityToken);
 
                 // ... add other claims, if necessary.
                 var principal = new ClaimsPrincipal(identity);
 
                 // Claims will not be associated with specific destinations by default, so we must indicate whether they should
                 // be included or not in access and identity tokens.
-                foreach (var claim in principal.Claims)
+//                foreach (var claim in principal.Claims)
+//                {
+//                    // For this sample, just include all claims in all token types.
+//                    // In reality, claims' destinations would probably differ by token type and depending on the scopes requested.
+//                    var destinations = new List<string>
+//                    {
+//                        OpenIdConnectConstants.Destinations.AccessToken
+//                    };
+//
+//                    // Only add the iterated claim to the id_token if the corresponding scope was granted to the client application.
+//                    // The other claims will only be added to the access_token, which is encrypted when using the default format.
+//                    if (claim.Type == OpenIdConnectConstants.Claims.Name ||
+//                        claim.Type == OpenIdConnectConstants.Claims.Role)
+//                    {
+//                        destinations.Add(OpenIdConnectConstants.Destinations.IdentityToken);
+//                    }
+//
+//                    claim.SetDestinations(destinations);
+//                }
+
+                var authProperties = new AuthenticationProperties
                 {
-                    // For this sample, just include all claims in all token types.
-                    // In reality, claims' destinations would probably differ by token type and depending on the scopes requested.
-                    claim.SetDestinations(OpenIdConnectConstants.Destinations.AccessToken,
-                        OpenIdConnectConstants.Destinations.IdentityToken);
-                }
+                    AllowRefresh = true
+                };
 
                 // Create a new authentication ticket for the user's principal
                 var ticket = new AuthenticationTicket(
                     principal,
-                    new AuthenticationProperties(),
+                    authProperties,
                     OpenIdConnectServerDefaults.AuthenticationScheme);
 
-                // Include resources and scopes, as appropriate
-                var scope = new[]
+                var roles = credentials.Employee.Roles.Select(r => r.Role);
+                var permissions = roles.SelectMany(p => p.Permissions,
+                    (role, permission) => permission.Permission.Name).ToList();
+
+                // common scopes
+                permissions.AddRange(new[]
                 {
                     OpenIdConnectConstants.Scopes.OpenId,
                     OpenIdConnectConstants.Scopes.Email,
                     OpenIdConnectConstants.Scopes.Profile,
                     OpenIdConnectConstants.Scopes.OfflineAccess,
                     OpenIddictConstants.Scopes.Roles
-                }.Intersect(request.GetScopes());
+                });
+
+                // Include resources and scopes, as appropriate
+                var scope = permissions.Intersect(request.GetScopes());
 
                 // Set resource servers
                 ticket.SetResources("aromato");

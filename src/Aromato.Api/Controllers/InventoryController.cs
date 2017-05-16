@@ -46,5 +46,19 @@ namespace Aromato.Api.Controllers
         {
             _inventoryService.AddItemToInventory(id, item);
         }
+
+        [Authorize("inventory.delete")]
+        [HttpDelete("{id}/item/{itemId}")]
+        public void DeleteItem(long id, long itemId)
+        {
+            _inventoryService.DeleteInventoryItem(id, itemId);
+        }
+
+        [Authorize("inventory.delete")]
+        [HttpDelete("{id}/item/unique/{uniqueItemId}")]
+        public void DeleteItem(long id, string uniqueItemId)
+        {
+            _inventoryService.DeleteInventoryItem(id, uniqueItemId);
+        }
     }
 }

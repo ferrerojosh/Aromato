@@ -18,6 +18,7 @@ namespace Aromato.Infrastructure.Crosscutting.Extension
             {
                 cfg.AddProfile<EmployeeWebProfile>();
                 cfg.AddProfile<InventoryWebProfile>();
+                cfg.AddProfile<RoleWebProfile>();
             });
         }
 

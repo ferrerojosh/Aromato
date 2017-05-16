@@ -1,0 +1,34 @@
+<ng-container *ngIf="inventories && inventories.length > 0; else loadingEmployees">
+  <div *ngFor="let inventory of inventories">
+    <p>{{ inventory.name }}</p>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Unique Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Date Added</th>
+        <th>Last Updated</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="inventory.items && inventory.items.length > 0">
+      <tr *ngFor="let item of inventory.items">
+        <th scope="row">{{ item.id }}</th>
+        <th>{{ item.uniqueId }}</th>
+        <td>{{ item.name }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.dateAdded }}</td>
+        <td>{{ item.lastUpdated }}</td>
+        <td>{{ item.status }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+<ng-template #loadingEmployees>
+  <div>
+    <p>Loading data...</p>
+  </div>
+</ng-template>

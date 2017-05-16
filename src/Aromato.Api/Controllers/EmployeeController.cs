@@ -53,6 +53,13 @@ namespace Aromato.Api.Controllers
             _employeeService.ChangeContactNo(id, data.ContactNo);
         }
 
+        [Authorize("employee.delete")]
+        [HttpDelete("{id}")]
+        public void Delete(long id)
+        {
+            _employeeService.DeleteEmployee(id);
+        }
+
         [HttpPut("{uniqueId}/punch")]
         public void Punch(string uniqueId)
         {

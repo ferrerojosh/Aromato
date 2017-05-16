@@ -62,5 +62,19 @@ namespace Aromato.Application.Web
 
             _inventoryRepository.UnitOfWork.Commit();
         }
+
+        public void DeleteInventoryItem(long inventoryId, long itemId)
+        {
+            var inventory = _inventoryRepository.FindById(inventoryId);
+            var inventoryItem = inventory.Items.FirstOrDefault(i => i.Id == itemId);
+            inventory.Items.Remove(inventoryItem);
+        }
+
+        public void DeleteInventoryItem(long inventoryId, string uniqueId)
+        {
+            var inventory = _inventoryRepository.FindById(inventoryId);
+            var inventoryItem = inventory.Items.FirstOrDefault(i => i.UniqueId == uniqueId);
+            inventory.Items.Remove(inventoryItem);
+        }
     }
 }

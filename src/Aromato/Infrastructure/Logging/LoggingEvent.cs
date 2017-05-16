@@ -4,7 +4,6 @@ namespace Aromato.Infrastructure.Logging
 {
     public class LoggingEvent
     {
-
         #region Employee Events
 
         public static EventId EmployeeCreated = 1000;

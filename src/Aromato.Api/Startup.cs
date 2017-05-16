@@ -5,6 +5,7 @@ using Aromato.Application;
 using Aromato.Application.Web;
 using Aromato.Domain.EmployeeAgg;
 using Aromato.Domain.InventoryAgg;
+using Aromato.Domain.RoleAgg;
 using Aromato.Infrastructure;
 using Aromato.Infrastructure.Events;
 using Aromato.Infrastructure.PostgreSQL;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using OpenIddict.Core;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
 
@@ -54,9 +56,11 @@ namespace Aromato.Api
 
             services.AddScoped<IEmployeeService, EmployeeWebService>();
             services.AddScoped<IInventoryService, InventoryWebService>();
+            services.AddScoped<IRoleService, RoleWebService>();
 
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
             services.AddScoped<IInventoryRepository, PostgresInventoryRepository>();
+            services.AddScoped<IRoleRepository, PostgresRoleRepository>();
 
             InitializePolicies(services);
 
@@ -87,6 +91,12 @@ namespace Aromato.Api
                                 policy.RequireClaim(OpenIdConnectConstants.Claims.Scope, permission.Name);
                             });
                         }
+
+                        // Add openid scopes
+                        options.AddPolicy(OpenIddictConstants.Scopes.Roles, policy =>
+                        {
+                            policy.RequireClaim(OpenIdConnectConstants.Claims.Scope, OpenIddictConstants.Scopes.Roles);
+                        });
                     }
                 }
             });
@@ -101,6 +111,13 @@ namespace Aromato.Api
         {
             // Use serilog as logging implementation
             loggerFactory.AddSerilog();
+
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins("http://localhost:4200");
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+            });
 
             // Ensure any buffered events are sent at shutdown
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);

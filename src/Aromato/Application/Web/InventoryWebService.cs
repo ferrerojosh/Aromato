@@ -10,10 +10,12 @@ namespace Aromato.Application.Web
     {
 
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IInventoryItemRepository _inventoryItemRepository;
 
-        public InventoryWebService(IInventoryRepository inventoryRepository)
+        public InventoryWebService(IInventoryRepository inventoryRepository, IInventoryItemRepository inventoryItemRepository)
         {
             _inventoryRepository = inventoryRepository;
+            _inventoryItemRepository = inventoryItemRepository;
         }
 
         public IData RetrieveById(long id)
@@ -67,14 +69,16 @@ namespace Aromato.Application.Web
         {
             var inventory = _inventoryRepository.FindById(inventoryId);
             var inventoryItem = inventory.Items.FirstOrDefault(i => i.Id == itemId);
-            inventory.Items.Remove(inventoryItem);
+            _inventoryItemRepository.Remove(inventoryItem);
+            _inventoryItemRepository.UnitOfWork.Commit();
         }
 
         public void DeleteInventoryItem(long inventoryId, string uniqueId)
         {
             var inventory = _inventoryRepository.FindById(inventoryId);
             var inventoryItem = inventory.Items.FirstOrDefault(i => i.UniqueId == uniqueId);
-            inventory.Items.Remove(inventoryItem);
+            _inventoryItemRepository.Remove(inventoryItem);
+            _inventoryRepository.UnitOfWork.Commit();
         }
     }
 }

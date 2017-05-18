@@ -4,38 +4,30 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { EmployeeComponent } from './employee/employee.component';
-import { InventoryComponent } from './inventory/inventory.component';
-import { LoginComponent } from './login/login.component';
-import { InventoryService } from "./inventory.service";
-import { EmployeeService } from "./employee.service";
-import { OAuthModule } from 'angular-oauth2-oidc';
-import { LoginRoleComponent } from './login-role/login-role.component';
-import { AppRoutingModule } from './app-routing.module';
-import { RoleService } from './role.service';
-import { AuthService } from './auth.service';
+import { LoginPageComponent } from './containers/login-page/login-page.component';
+import { HomePageComponent } from './containers/home-page/home-page.component';
+import { MaterialModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
+import { routes } from './app-routing.module';
+import { AuthService } from './core/services/auth.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    EmployeeComponent,
-    InventoryComponent,
-    LoginComponent,
-    LoginRoleComponent
+    LoginPageComponent,
+    HomePageComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
+    MaterialModule,
     HttpModule,
-    AppRoutingModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [
-    AuthService,
-    InventoryService,
-    EmployeeService,
-    RoleService
-  ],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Aromato.Domain.EmployeeAgg;
 
 namespace Aromato.Domain.RoleAgg
 {

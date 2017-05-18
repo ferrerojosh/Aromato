@@ -2,7 +2,7 @@
 
 namespace Aromato.Domain.InventoryAgg
 {
-    public class InventoryItem : IEntity<long>
+    public class InventoryItem : IAggregateRoot<long>
     {
         private DateTime? _dateAdded;
         private DateTime? _lastUpdated;

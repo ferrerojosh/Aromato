@@ -60,6 +60,7 @@ namespace Aromato.Api
 
             services.AddScoped<IEmployeeRepository, PostgresEmployeeRepository>();
             services.AddScoped<IInventoryRepository, PostgresInventoryRepository>();
+            services.AddScoped<IInventoryItemRepository, PostgresInventoryItemRepository>();
             services.AddScoped<IRoleRepository, PostgresRoleRepository>();
 
             InitializePolicies(services);
@@ -114,7 +115,7 @@ namespace Aromato.Api
 
             app.UseCors(builder =>
             {
-                builder.WithOrigins("http://localhost:4200");
+                builder.WithOrigins("http://192.168.143.180:4200", "http://localhost:4200");
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
             });
@@ -131,6 +132,20 @@ namespace Aromato.Api
             {
                 Audience = "aromato",
                 Authority = "http://localhost:5000/",
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = OpenIdConnectConstants.Claims.Name,
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                }
+            });
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                Audience = "aromato",
+                Authority = "http://192.168.143.180:5000/",
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 RequireHttpsMetadata = false,

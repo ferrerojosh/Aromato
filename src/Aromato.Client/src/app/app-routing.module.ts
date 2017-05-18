@@ -1,24 +1,14 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { InventoryComponent } from './inventory/inventory.component';
-import { EmployeeComponent } from './employee/employee.component';
-import { LoginRoleComponent } from './login-role/login-role.component';
+import { Routes } from '@angular/router';
+import { HomePageComponent } from './containers/home-page/home-page.component';
+import { LoginPageComponent } from './containers/login-page/login-page.component';
 
-const appRoutes: Routes = [
-  { path: 'home', component: LoginComponent },
-  { path: 'employee', component: EmployeeComponent },
-  { path: 'inventory', component: InventoryComponent},
-  { path: 'login', component: LoginComponent },
-  { path: 'authorize', component: LoginRoleComponent }
+export const routes: Routes = [
+  {
+    path: '',
+    component: HomePageComponent
+  },
+  {
+    path: 'login',
+    component: LoginPageComponent
+  }
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forRoot(appRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
-})
-export class AppRoutingModule { }

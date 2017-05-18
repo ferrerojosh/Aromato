@@ -14,6 +14,7 @@ namespace Aromato.Infrastructure.PostgreSQL
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<InventoryItem> InventoryItems { get; set; }
 
         public PostgresUnitOfWork()
         {

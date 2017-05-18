@@ -118,7 +118,7 @@ namespace Aromato.Auth
 
             app.UseCors(builder =>
             {
-                builder.WithOrigins("http://localhost:4200");
+                builder.WithOrigins("http://192.168.143.180:4200", "http://localhost:4200");
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
             });

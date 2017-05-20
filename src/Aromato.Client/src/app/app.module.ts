@@ -10,13 +10,21 @@ import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { routes } from './app-routing.module';
-import { AuthService } from './core/services/auth.service';
+import { CoreModule } from './core/core.module';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { AuthorizeComponent } from './components/authorize/authorize.component';
+import { EmployeePageComponent } from './containers/employee-page/employee-page.component';
+import { InventoryPageComponent } from './containers/inventory-page/inventory-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
     HomePageComponent,
+    ToolbarComponent,
+    AuthorizeComponent,
+    EmployeePageComponent,
+    InventoryPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,9 +33,13 @@ import { AuthService } from './core/services/auth.service';
     FormsModule,
     MaterialModule,
     HttpModule,
+    CoreModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [AuthService],
+  entryComponents: [
+    AuthorizeComponent
+  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

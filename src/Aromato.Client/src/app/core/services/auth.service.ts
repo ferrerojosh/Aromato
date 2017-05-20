@@ -14,8 +14,6 @@ const USER_INFO_STORAGE = 'user_info';
 @Injectable()
 export class AuthService {
 
-  constructor(private http: Http) {}
-
   // open id well known configs
   public issuer: string;
   public authorizationEndpoint: string;
@@ -32,6 +30,8 @@ export class AuthService {
 
   private _storage: Storage = localStorage;
 
+  constructor(private http: Http) {}
+
   public useStorage(storage: Storage) {
     this._storage = storage;
   }
@@ -43,7 +43,7 @@ export class AuthService {
       }
 
       this.http.get(documentUrl).map(result => result.json()).subscribe(
-        (data) => {
+        data => {
           this.issuer = data.issuer;
           this.authorizationEndpoint = data.authorization_endpoint;
           this.tokenEndpoint = data.token_endpoint;
@@ -58,7 +58,7 @@ export class AuthService {
           observer.next(true);
           observer.complete();
         },
-        (error) => {
+        error => {
           console.error('cannot load discovery document');
           observer.error(error);
         }
@@ -85,7 +85,7 @@ export class AuthService {
         });
 
         this.http.post(this.tokenEndpoint, params.toString(), { headers }).map(r => r.json()).subscribe(
-          (data) => {
+          data => {
             if (data.id_token) {
               this.initializeIdentityClaims(data.id_token);
               this.saveIdentityToken(data.id_token, this.identityClaims().exp);
@@ -101,10 +101,13 @@ export class AuthService {
             observer.next(true);
             observer.complete();
           },
-          (error) => {
+          error => {
             observer.error(error);
           }
         );
+      },
+      error => {
+        observer.error(error);
       });
     });
   }
@@ -124,20 +127,22 @@ export class AuthService {
     return this._storage.getItem(ACCESS_TOKEN_STORAGE);
   }
 
-  public logout(postLogoutUri: string = null) {
-    this.loadDiscoveryDocument().subscribe(() => {
-      const logoutUri = this.endSessionEndpoint + `?id_token_hint=${this.identityToken()}&post_logout_redirect_uri=${postLogoutUri}`;
+  public logout(postLogoutUri: string = null): Observable<string> {
+    return new Observable(observer => {
+      this.loadDiscoveryDocument().subscribe(() => {
+        const logoutUri = this.endSessionEndpoint + `?id_token_hint=${this.identityToken()}&post_logout_redirect_uri=${postLogoutUri}`;
 
-      this._storage.removeItem(ACCESS_TOKEN_EXPIRY);
-      this._storage.removeItem(ACCESS_TOKEN_STORAGE);
-      this._storage.removeItem(ACCESS_TOKEN_CLAIMS_STORAGE);
-      this._storage.removeItem(IDENTITY_TOKEN_EXPIRY);
-      this._storage.removeItem(IDENTITY_TOKEN_STORAGE);
-      this._storage.removeItem(IDENTITY_TOKEN_CLAIMS_STORAGE);
-      this._storage.removeItem(REFRESH_TOKEN_STORAGE);
-      this._storage.removeItem(USER_INFO_STORAGE);
+        this._storage.removeItem(ACCESS_TOKEN_EXPIRY);
+        this._storage.removeItem(ACCESS_TOKEN_STORAGE);
+        this._storage.removeItem(ACCESS_TOKEN_CLAIMS_STORAGE);
+        this._storage.removeItem(IDENTITY_TOKEN_EXPIRY);
+        this._storage.removeItem(IDENTITY_TOKEN_STORAGE);
+        this._storage.removeItem(IDENTITY_TOKEN_CLAIMS_STORAGE);
+        this._storage.removeItem(REFRESH_TOKEN_STORAGE);
+        this._storage.removeItem(USER_INFO_STORAGE);
 
-      window.location.href = logoutUri;
+        observer.next(logoutUri);
+      });
     });
   }
 
@@ -172,21 +177,16 @@ export class AuthService {
   private retrieveUserInfo(): Observable<boolean> {
     return new Observable(observer => {
       if (this.userInfoEndpoint) {
-        console.debug('user info endpoint supported');
-
         const headers = new Headers({
           'Authorization': this.authorizationHeader()
         });
 
         this.http.get(this.userInfoEndpoint, { headers }).map(r => r.json()).subscribe(
-          (userInfo) => {
-            console.debug('user info', userInfo);
-
+          userInfo => {
             this._storage.setItem(USER_INFO_STORAGE, JSON.stringify(userInfo));
-
             observer.next(true);
           },
-          (error) => {
+          error => {
             observer.error(error);
           }
         );

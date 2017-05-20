@@ -1,0 +1,32 @@
+<md-card>
+  <md-card-header>
+    <md-card-title>Employees</md-card-title>
+    <md-card-subtitle>2nd Semester 2016 - 2017</md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    <table class="table">
+      <thead>
+        <th>UniqueId</th>
+        <th>Family Name</th>
+        <th>Given Name</th>
+        <th>Middle Name</th>
+        <th>Gender</th>
+        <th>Email</th>
+        <th>Contact #</th>
+        <th>Date of Birth</th>
+      </thead>
+      <tbody>
+      <tr *ngFor="let employee of employees$ | async">
+        <td scope="row">{{ employee.uniqueId }}</td>
+        <td>{{ employee.lastName }}</td>
+        <td>{{ employee.firstName }}</td>
+        <td>{{ employee.middleName }}</td>
+        <td>{{ employee.gender }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.contactNo }}</td>
+        <td>{{ employee.dateOfBirth }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </md-card-content>
+</md-card>

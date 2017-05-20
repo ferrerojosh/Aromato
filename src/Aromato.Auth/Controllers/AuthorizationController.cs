@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Aromato.Infrastructure.PostgreSQL;
@@ -63,6 +62,9 @@ namespace Aromato.Auth.Controllers
                     OpenIdConnectConstants.Destinations.AccessToken);
                 identity.AddClaim(OpenIdConnectConstants.Claims.Subject, credentials.Employee.UniqueId, OpenIdConnectConstants.Destinations.IdentityToken);
                 identity.AddClaim(OpenIdConnectConstants.Claims.Name, credentials.Employee.Name, OpenIdConnectConstants.Destinations.IdentityToken);
+                identity.AddClaim(OpenIdConnectConstants.Claims.FamilyName, credentials.Employee.LastName, OpenIdConnectConstants.Destinations.IdentityToken);
+                identity.AddClaim(OpenIdConnectConstants.Claims.GivenName, credentials.Employee.FirstName, OpenIdConnectConstants.Destinations.IdentityToken);
+                identity.AddClaim(OpenIdConnectConstants.Claims.MiddleName, credentials.Employee.MiddleName, OpenIdConnectConstants.Destinations.IdentityToken);
 
                 // ... add other claims, if necessary.
                 var principal = new ClaimsPrincipal(identity);

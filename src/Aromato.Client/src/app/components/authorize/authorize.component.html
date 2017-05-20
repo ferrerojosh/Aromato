@@ -1,0 +1,21 @@
+<div class="text-center">
+  <img class="img-fluid img-thumbnail rounded-circle avatar-img" src="assets/cat.jpg">
+  <h4>Welcome back, {{ name }}!</h4>
+  <p>Please re-enter your password to invoke a role.</p>
+</div>
+<form novalidate [formGroup]="authorizeForm">
+  <div class="form-group">
+    <md-input-container>
+      <input type="password" mdInput placeholder="Password" formControlName="password">
+    </md-input-container>
+  </div>
+  <div class="form-group">
+    <md-select placeholder="Role" formControlName="selectedRole">
+      <md-option *ngFor="let role of roles$ | async" [value]="role">{{ role.name }}</md-option>
+    </md-select>
+  </div>
+  <div class="form-group">
+    <button color="primary" md-raised-button (click)="onSubmit()">Invoke</button>
+  </div>
+</form>
+

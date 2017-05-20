@@ -1,0 +1,12 @@
+<md-toolbar color="primary">
+  <button class="icon-button menu-button" (click)="navButtonClick.emit()">
+    <md-icon>menu</md-icon>
+  </button>
+  <div class="mr-auto">{{ title }}</div>
+  <md-menu #appMenu="mdMenu">
+    <ng-content></ng-content>
+  </md-menu>
+  <button md-icon-button [mdMenuTriggerFor]="appMenu">
+    <md-icon>more_vert</md-icon>
+  </button>
+</md-toolbar>

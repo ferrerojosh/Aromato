@@ -1,21 +1,33 @@
-<md-sidenav-container>
-  <md-sidenav #sidenav mode="over">
-    <h1>Hello world</h1>
+<md-sidenav-container fullscreen (backdropClick)="closeSidenav()">
+  <md-sidenav #sidenav mode="over" [opened]="showSidenav$ | async">
+    <img class="nav-image img-fluid" src="assets/cat.jpg">
+    <ng-container *ngIf="isLoggedIn$ | async; else loggedOutNav">
+      <button routerLink="/inventory" (click)="closeSidenav()" md-menu-item>
+        <md-icon> dialpad </md-icon>
+        <span> Inventory </span>
+      </button>
+      <button routerLink="/employee" (click)="closeSidenav()" md-menu-item>
+        <md-icon> voicemail </md-icon>
+        <span> Employee </span>
+      </button>
+    </ng-container>
+    <ng-template #loggedOutNav>
+      <button md-menu-item routerLink="/login" (click)="closeSidenav()" md-menu-item>
+        <md-icon> input </md-icon>
+        <span> Login </span>
+      </button>
+    </ng-template>
   </md-sidenav>
-
-  <md-toolbar color="primary">
-    <button class="icon-button menu-button" (click)="sidenav.toggle()">
-      <md-icon>menu</md-icon>
-    </button>
-    <div class="mr-auto">Aromato</div>
-    <md-menu #appMenu="mdMenu">
-      <button md-menu-item> Settings </button>
-      <button md-menu-item> Help </button>
-    </md-menu>
-    <button md-icon-button [mdMenuTriggerFor]="appMenu">
-      <md-icon>more_vert</md-icon>
-    </button>
-  </md-toolbar>
+  <app-toolbar title="Aromato" (navButtonClick)="openSidenav()">
+    <ng-container *ngIf="isLoggedIn$ | async; else loggedOutMenu">
+      <button md-menu-item> Profile </button>
+      <button md-menu-item (click)="logout()"> Logout </button>
+    </ng-container>
+    <ng-template #loggedOutMenu>
+      <button md-menu-item routerLink="/login"> Login </button>
+      <button md-menu-item> Register </button>
+    </ng-template>
+  </app-toolbar>
   <main>
     <router-outlet></router-outlet>
   </main>

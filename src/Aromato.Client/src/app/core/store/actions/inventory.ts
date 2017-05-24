@@ -1,9 +1,9 @@
 import { Action } from '@ngrx/store';
 import { Inventory } from '../../models/inventory';
 
-export const LOAD = '[InventoryEffects] Load';
-export const LOAD_SUCCESS = '[InventoryEffects] Load Success';
-export const LOAD_FAILURE = '[InventoryEffects] Load Failure';
+export const LOAD = '[Inventory] Load';
+export const LOAD_SUCCESS = '[Inventory] Load Success';
+export const LOAD_FAILURE = '[Inventory] Load Failure';
 
 export class InventoryLoadAction implements Action {
   readonly type = LOAD;

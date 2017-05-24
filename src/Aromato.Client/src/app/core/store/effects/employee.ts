@@ -11,7 +11,6 @@ export class EmployeeEffects {
   @Effect()
   loadEmployee$ = this.actions$
     .ofType(employee.LOAD)
-    .startWith(new employee.EmployeeLoadAction())
     .switchMap(() =>
       this.employeeService
         .findAll()

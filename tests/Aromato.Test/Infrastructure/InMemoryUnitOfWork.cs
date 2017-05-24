@@ -1,5 +1,6 @@
 ﻿using System;
 using Aromato.Domain;
+using Aromato.Domain.CredentialAgg;
 using Aromato.Domain.EmployeeAgg;
 using Aromato.Domain.InventoryAgg;
 using Aromato.Domain.RoleAgg;
@@ -25,6 +26,18 @@ namespace Aromato.Test.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Employee>(employee =>
+            {
+                employee.HasOne(e => e.Credential).WithOne(c => c.Employee)
+                    .HasForeignKey<Employee>("credential_id");
+            });
+
+            modelBuilder.Entity<Credential>(credential =>
+            {
+                credential.HasOne(c => c.Employee).WithOne(e => e.Credential)
+                    .HasForeignKey<Employee>("employee_id");
+            });
 
             modelBuilder.Entity<EmployeeRole>(empRole =>
             {

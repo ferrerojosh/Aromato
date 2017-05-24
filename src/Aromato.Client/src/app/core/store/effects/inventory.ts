@@ -13,7 +13,6 @@ export class InventoryEffects {
   @Effect()
   loadInventory$: Observable<Action> = this.actions$
     .ofType(inventory.LOAD)
-    .startWith(new inventory.InventoryLoadAction())
     .switchMap(() =>
       this.inventoryService
         .findAll()

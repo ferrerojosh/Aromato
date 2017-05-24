@@ -25,6 +25,7 @@ export class RoleService {
     });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.get(environment.resourceServer + 'role', options).map(r => r.json());
+    return this.http.get(environment.resourceServer + 'role', options)
+      .map(r => r.json());
   }
 }

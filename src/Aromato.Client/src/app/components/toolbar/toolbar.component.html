@@ -1,12 +1,27 @@
-<md-toolbar color="primary">
-  <button class="icon-button menu-button" (click)="navButtonClick.emit()">
-    <md-icon>menu</md-icon>
-  </button>
-  <div class="mr-auto">{{ title }}</div>
-  <md-menu #appMenu="mdMenu">
-    <ng-content></ng-content>
-  </md-menu>
-  <button md-icon-button [mdMenuTriggerFor]="appMenu">
-    <md-icon>more_vert</md-icon>
-  </button>
+<md-toolbar class="d-flex justify-content-center" color="primary">
+  <div class="toolbar-group">
+    <button md-icon-button (click)="menuClick.emit()">
+      <md-icon>menu</md-icon>
+    </button>
+  </div>
+  <div class="toolbar-group">
+    <a md-button routerLink="/admin">AROMATO</a>
+  </div>
+  <div class="mr-auto"></div>
+  <div class="toolbar-group">
+    <button md-icon-button>
+      <md-icon>view_module</md-icon>
+    </button>
+  </div>
+  <div class="toolbar-group">
+    <button md-icon-button [mdMenuTriggerFor]="menu">
+      <md-icon>more_vert</md-icon>
+    </button>
+    <md-menu #menu xPosition="before">
+      <button (click)="logout()" md-menu-item>
+        <md-icon>exit_to_app</md-icon>
+        <span>Logout</span>
+      </button>
+    </md-menu>
+  </div>
 </md-toolbar>

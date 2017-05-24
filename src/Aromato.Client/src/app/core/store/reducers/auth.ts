@@ -7,7 +7,7 @@ export interface State {
   authenticated: boolean;
 }
 
-const initialState: State = {
+export const initialState: State = {
   identity: {},
   accessToken: '',
   authorized: false,
@@ -16,14 +16,14 @@ const initialState: State = {
 
 export function reducer(state = initialState, action: auth.Actions): State {
   switch (action.type) {
-    case auth.AUTHENTICATE:
+    case auth.AUTHENTICATE_SUCCESS:
       return {
         identity: action.identityClaims,
         accessToken: action.accessToken,
         authorized: false,
         authenticated: true,
       };
-    case auth.AUTHORIZE:
+    case auth.AUTHORIZE_SUCCESS:
       return {
         identity: state.identity,
         accessToken: action.accessToken,

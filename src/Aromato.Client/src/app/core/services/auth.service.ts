@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-const IDENTITY_TOKEN_STORAGE = 'identity_token';
-const IDENTITY_TOKEN_CLAIMS_STORAGE = 'identity_token_claims';
-const IDENTITY_TOKEN_EXPIRY = 'identity_token_expiry';
-const ACCESS_TOKEN_STORAGE = 'access_token';
-const ACCESS_TOKEN_CLAIMS_STORAGE = 'access_token_claims';
-const ACCESS_TOKEN_EXPIRY = 'access_token_expiry';
-const REFRESH_TOKEN_STORAGE = 'refresh_token';
-const USER_INFO_STORAGE = 'user_info';
+export const IDENTITY_TOKEN_STORAGE = 'identity_token';
+export const IDENTITY_TOKEN_CLAIMS_STORAGE = 'identity_token_claims';
+export const IDENTITY_TOKEN_EXPIRY = 'identity_token_expiry';
+export const ACCESS_TOKEN_STORAGE = 'access_token';
+export const ACCESS_TOKEN_CLAIMS_STORAGE = 'access_token_claims';
+export const ACCESS_TOKEN_EXPIRY = 'access_token_expiry';
+export const REFRESH_TOKEN_STORAGE = 'refresh_token';
+export const USER_INFO_STORAGE = 'user_info';
 
 @Injectable()
 export class AuthService {

@@ -1,7 +1,3 @@
-import * as fromRouter from '@ngrx/router-store';
-import * as fromLayout from './layout';
-import * as fromAuth from './auth';
-
 /**
  * The compose function is one of our most handy tools. In basic terms, you give
  * it any number of functions and it returns a function. This new function
@@ -31,16 +27,26 @@ import { ActionReducer, combineReducers } from '@ngrx/store';
 import { environment } from '../../../../environments/environment';
 import { createSelector } from 'reselect';
 
+import * as fromRouter from '@ngrx/router-store';
+import * as fromLayout from './layout';
+import * as fromAuth from './auth';
+import * as fromInventory from './inventory';
+import * as fromEmployee from './employee';
+
 export interface AppState {
   router: fromRouter.RouterState;
   layout: fromLayout.State;
+  inventory: fromInventory.State;
   auth: fromAuth.State;
+  employee: fromEmployee.State;
 }
 
 const reducers = {
   router: fromRouter.routerReducer,
   layout: fromLayout.reducer,
-  auth: fromAuth.reducer
+  inventory: fromInventory.reducer,
+  auth: fromAuth.reducer,
+  employee: fromEmployee.reducer
 };
 
 const developmentReducer: ActionReducer<AppState> = compose(storeFreeze, combineReducers)(reducers);
@@ -54,11 +60,16 @@ export function reducer(state: any, action: any) {
   }
 }
 
+export const routerState = (state: AppState) => state.router;
 export const layoutState = (state: AppState) => state.layout;
 export const authState = (state: AppState) => state.auth;
+export const inventoryState = (state: AppState) => state.inventory;
+export const employeeState = (state: AppState) => state.employee;
 
-export const showSidenav = createSelector(layoutState, fromLayout.showSidenav);
+export const isSideNavOpened = createSelector(layoutState, fromLayout.sideNavOpened);
 export const isAuthorized = createSelector(authState, fromAuth.authorized);
 export const isAuthenticated = createSelector(authState, fromAuth.authenticated);
 export const accessToken = createSelector(authState, fromAuth.accessToken);
 export const identity = createSelector(authState, fromAuth.identity);
+export const inventories = createSelector(inventoryState, fromInventory.inventories);
+export const employees = createSelector(employeeState, fromEmployee.employees);

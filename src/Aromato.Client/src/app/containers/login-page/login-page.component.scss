@@ -1,18 +1,11 @@
-md-input-container, button {
-  width: 100%;
+md-toolbar {
+  padding: 0 4rem 0 4rem;
 }
 
-button {
-  padding: 0.5rem;
+md-card {
+  padding: 0;
 }
 
-.avatar-img {
-  width: 12rem;
-  margin-bottom: 1.8rem;
-}
-
-.login-footer .lead {
-  margin-top: 5rem;
-  font-size: 1rem;
-  color: #808080;
+md-card-content, md-card-actions {
+  padding: 4rem;
 }

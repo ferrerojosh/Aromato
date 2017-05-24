@@ -1,28 +1,24 @@
-<div class="d-flex justify-content-center">
-  <div class="p-2">
-    <md-card class="text-center">
-      <img class="img-fluid img-thumbnail rounded-circle avatar-img" src="assets/cat.jpg">
-      <form [formGroup]="loginForm" novalidate>
-        <div class="form-group">
-          <h4>Sign In</h4>
-        </div>
-        <div class="form-group">
-          <md-input-container>
-            <input type="text" class="form-control" formControlName="username" mdInput placeholder="Username">
-          </md-input-container>
-        </div>
-        <div class="form-group">
-          <md-input-container>
-            <input type="password" class="form-control" formControlName="password" mdInput placeholder="Password">
-          </md-input-container>
-        </div>
-        <div class="form-group">
-          <button color="primary" md-raised-button (click)="onSubmit()">Login</button>
+<div class="login-container">
+  <md-card>
+    <md-toolbar color="primary">
+      <span>Aromato</span>
+    </md-toolbar>
+    <md-card-content *ngIf="!(isAuthenticated$ | async)">
+      <form novalidate [formGroup]="login">
+        <md-input-container class="form-control">
+          <input mdInput type="text" formControlName="username" placeholder="Username">
+        </md-input-container>
+        <md-input-container class="form-control">
+          <input mdInput type="password" formControlName="password" placeholder="Password">
+        </md-input-container>
+        <div class="form-control">
+          <button md-raised-button (click)="onSubmit()">Login</button>
         </div>
       </form>
-    </md-card>
-    <div class="login-footer text-center">
-      <p class="lead">&copy; 2017 Digital and Microprocessor Laboratory</p>
-    </div>
-  </div>
+    </md-card-content>
+    <md-card-content *ngIf="(isAuthenticated$ | async)">
+      <app-authorize></app-authorize>
+    </md-card-content>
+  </md-card>
 </div>
+

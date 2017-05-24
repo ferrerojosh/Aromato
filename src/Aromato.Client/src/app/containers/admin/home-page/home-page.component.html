@@ -1,0 +1,14 @@
+<md-sidenav-container fullscreen (backdropClick)="closeSideNav()">
+  <app-toolbar (menuClick)="openSideNav()"></app-toolbar>
+  <md-sidenav #sidenav [opened]="isSideNavOpened$ | async" #sidenav>
+    <a routerLink="/admin/inventory" (click)="closeSideNav()" md-menu-item>
+      <md-icon>exit_to_app</md-icon>
+      <span>Inventory</span>
+    </a>
+    <a routerLink="/admin/employee" (click)="closeSideNav()" md-menu-item>
+      <md-icon>exit_to_app</md-icon>
+      <span>Employee</span>
+    </a>
+  </md-sidenav>
+  <router-outlet></router-outlet>
+</md-sidenav-container>

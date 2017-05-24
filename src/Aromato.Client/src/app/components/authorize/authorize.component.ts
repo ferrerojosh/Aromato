@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialogRef, MdSnackBar } from '@angular/material';
-import { Role } from '../../core/models/role';
-import { RoleService } from '../../core/services/role.service';
-import { Observable } from 'rxjs/Observable';
-import { AuthService } from '../../core/services/auth.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 import * as auth from '../../core/store/actions/auth';
 import * as fromRoot from '../../core/store/reducers';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { Role } from '../../core/models/role';
+import { RoleService } from '../../core/services/role.service';
+import { AuthService } from '../../core/services/auth.service';
+import { environment } from '../../../environments/environment';
+import { isAuthenticated } from '../../core/store/reducers/index';
 
 @Component({
   selector: 'app-authorize',
@@ -17,43 +17,38 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./authorize.component.scss']
 })
 export class AuthorizeComponent implements OnInit {
-  authorizeForm: FormGroup;
+  authorize: FormGroup;
   roles$: Observable<Role[]>;
   name: string;
 
-  constructor(public dialogRef: MdDialogRef<AuthorizeComponent>,
+  constructor(private formBuider: FormBuilder,
               private authService: AuthService,
-              private formBuilder: FormBuilder,
-              private router: Router,
-              public snackBar: MdSnackBar,
-              private store: Store<fromRoot.AppState>,
-              private roleService: RoleService) { }
+              private roleService: RoleService,
+              private store: Store<fromRoot.AppState>) { }
 
   ngOnInit() {
-    this.authorizeForm = this.formBuilder.group({
-      password: [''],
-      selectedRole: ['']
+    this.store.select(fromRoot.isAuthenticated).subscribe(isAuthenticated => {
+      if (!this.authService.accessTokenValid() && isAuthenticated) {
+        this.authService.issuer = environment.authServer;
+        this.authService.logout('http://localhost:4200').subscribe();
+      }
     });
+
     this.name = this.authService.identityClaims().given_name;
     this.roles$ = this.roleService.findAll();
+    this.authorize = this.formBuider.group({
+      password: [],
+      role: []
+    });
   }
 
   onSubmit() {
-    let username = this.authService.identityClaims().username;
-    let password = this.authorizeForm.value.password;
-    let selectedRole = this.authorizeForm.value.selectedRole;
-
-    if (this.authorizeForm.valid) {
-      this.authService.login(username, password, selectedRole.permissions.map(p => p.name)).subscribe(() => {
-        this.store.dispatch(new auth.AuthorizeAction(this.authService.accessToken()));
-        this.router.navigate(['/']);
-        this.dialogRef.close();
-      }, error => {
-        this.dialogRef.close();
-        this.snackBar.open('There was an error authorizing selected role. Please check your internet connection.');
-      });
+    if (this.authorize.valid) {
+      const creds = this.authorize.value;
+      const username = this.authService.accessClaims().username;
+      const selectedRole = creds.role as Role;
+      this.store.dispatch(new auth.AuthorizeAction(username, creds.password, selectedRole.permissions.map(p => p.name)));
     }
-
   }
 
 }

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Aromato.Application;
 using Aromato.Application.Web.Data;
+using AspNet.Security.OpenIdConnect.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Aromato.Api.Controllers
 {
@@ -12,10 +15,12 @@ namespace Aromato.Api.Controllers
     {
 
         private readonly IEmployeeService _employeeService;
+        private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeService employeeService, ILogger<EmployeeController> logger)
         {
             _employeeService = employeeService;
+            _logger = logger;
         }
 
         [Authorize("employee.read")]
@@ -39,18 +44,41 @@ namespace Aromato.Api.Controllers
             _employeeService.CreateEmployee(data);
         }
 
-        [Authorize("employee.modify")]
+        [Authorize]
         [HttpPut("{id}/email")]
         public void ChangeEmail(long id, [FromBody] EmployeeWebData data)
         {
-            _employeeService.ChangeEmail(id, data.Email);
+            if (CanModifySelf(id) || User.HasClaim("scope", "employee.modify"))
+            {
+                _employeeService.ChangeEmail(id, data.Email);
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = 403;
+            }
         }
 
-        [Authorize("employee.modify")]
+        private bool CanModifySelf(long employeeId)
+        {
+            if (User.HasClaim("scope", "employee.self"))
+            {
+                return long.Parse(User.GetClaim("id")) == employeeId;
+            }
+            return false;
+        }
+
+        [Authorize]
         [HttpPut("{id}/contact_no")]
         public void ChangeContactNo(long id, [FromBody] EmployeeWebData data)
         {
-            _employeeService.ChangeContactNo(id, data.ContactNo);
+            if (CanModifySelf(id) || User.HasClaim("scope", "employee.modify"))
+            {
+                _employeeService.ChangeContactNo(id, data.ContactNo);
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = 403;
+            }
         }
 
         [Authorize("employee.delete")]

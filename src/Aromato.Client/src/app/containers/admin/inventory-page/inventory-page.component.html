@@ -1,0 +1,28 @@
+<div class="inventory-list">
+  <md-card *ngFor="let inventory of inventories$ | async">
+    <md-card-header>
+      <md-card-title>{{ inventory.name }}</md-card-title>
+      <md-card-subtitle>{{ inventory.description }}</md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      <table class="table">
+        <thead>
+          <th>Unique ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Last Updated</th>
+          <th>Date Added</th>
+        </thead>
+        <tbody *ngFor="let item of inventory.items">
+          <tr>
+            <td>{{ item.uniqueId }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.lastUpdated }}</td>
+            <td>{{ item.dateAdded }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-card-content>
+  </md-card>
+</div>

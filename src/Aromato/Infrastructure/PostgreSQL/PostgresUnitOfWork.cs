@@ -34,8 +34,6 @@ namespace Aromato.Infrastructure.PostgreSQL
                 cred.Property(e => e.Username).HasColumnName("username");
                 cred.Property(e => e.Password).HasColumnName("password");
 
-                cred.HasOne(e => e.Employee).WithMany().HasForeignKey("employee_id");
-
                 cred.ForNpgsqlUseXminAsConcurrencyToken();
 
                 cred.ToTable("credential");
@@ -104,6 +102,7 @@ namespace Aromato.Infrastructure.PostgreSQL
                 employee.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
                 employee.HasMany(e => e.Punches).WithOne().HasForeignKey("employee_id");
                 employee.HasMany(e => e.Roles).WithOne().HasForeignKey("employee_id");
+                employee.HasOne(e => e.Credential).WithOne(e => e.Employee).HasForeignKey<Credential>("employee_id");
 
                 employee.ForNpgsqlUseXminAsConcurrencyToken();
 

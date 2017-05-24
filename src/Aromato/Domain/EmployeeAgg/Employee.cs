@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aromato.Domain.CredentialAgg;
 using Aromato.Domain.EmployeeAgg.Events;
 using Aromato.Domain.RoleAgg;
 using Aromato.Helpers;
@@ -59,6 +60,7 @@ namespace Aromato.Domain.EmployeeAgg
         public virtual string Email { get; private set; }
         public virtual Gender Gender { get; protected set; }
         public virtual DateTime DateOfBirth { get; protected set; }
+        public virtual Credential Credential { get; protected set; }
         public virtual IList<DutySchedule> DutySchedules { get; } = new List<DutySchedule>();
         public virtual IList<Punch> Punches { get; } = new List<Punch>();
         public virtual IList<EmployeeRole> Roles { get; } = new List<EmployeeRole>();

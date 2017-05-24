@@ -1,3 +1,18 @@
-.menu-button {
-  color: #ffffff;
+.toolbar-avatar {
+  width: 3em;
+}
+
+.toolbar-group {
+  margin: 0 0.5rem 0 0.5rem;
+}
+
+md-toolbar {
+  padding: 0 5rem 0 5rem;
+}
+
+*:focus {
+  outline: none;
+}
+
+.search-icon {
 }

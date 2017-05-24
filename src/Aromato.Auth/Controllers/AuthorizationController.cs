@@ -35,6 +35,7 @@ namespace Aromato.Auth.Controllers
         {
             if (request.IsPasswordGrantType())
             {
+
                 var credentials = await _unitOfWork.Credentials
                     .Include("Employee.Roles.Role.Permissions.Permission")
                     .FirstOrDefaultAsync(c => c.Username == request.Username);
@@ -58,6 +59,9 @@ namespace Aromato.Auth.Controllers
                 // in the access token, so it can be retrieved from your controllers.
 
                 identity.AddClaim(OpenIdConnectConstants.Claims.Username, credentials.Username,
+                    OpenIdConnectConstants.Destinations.IdentityToken,
+                    OpenIdConnectConstants.Destinations.AccessToken);
+                identity.AddClaim("id", credentials.Employee.Id.ToString(),
                     OpenIdConnectConstants.Destinations.IdentityToken,
                     OpenIdConnectConstants.Destinations.AccessToken);
                 identity.AddClaim(OpenIdConnectConstants.Claims.Subject, credentials.Employee.UniqueId, OpenIdConnectConstants.Destinations.IdentityToken);

@@ -1,26 +1,24 @@
-import * as layout from '../actions/layout';
+import * as fromLayout from '../actions/layout';
 
 export interface State {
   sideNavOpened: boolean;
 }
 
 export const initialState: State = {
-  sideNavOpened: false,
+  sideNavOpened: false
 };
 
-export function reducer(state = initialState, action: layout.Actions): State {
-  switch (action.type) {
-    case layout.CLOSE_SIDENAV:
+export function reducer(state = initialState, action: fromLayout.Actions) {
+  switch(action.type) {
+    case fromLayout.TOGGLE_SIDENAV:
       return {
-        sideNavOpened: false
+        sideNavOpened: action.payload
       };
-    case layout.OPEN_SIDENAV:
-      return {
-        sideNavOpened: true
-      };
+    case fromLayout.LOAD_FROM_DB_SUCCESS:
+      return action.payload;
     default:
       return state;
   }
 }
 
-export const sideNavOpened = (state: State) => state.sideNavOpened;
+export const isSideNavOpened = (state: State) => state.sideNavOpened;

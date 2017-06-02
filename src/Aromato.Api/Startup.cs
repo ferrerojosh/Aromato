@@ -1,6 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Threading.Tasks;
 using Aromato.Application;
 using Aromato.Application.Web;
 using Aromato.Domain.EmployeeAgg;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NpgsqlTypes;
 using OpenIddict.Core;
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
@@ -37,11 +39,24 @@ namespace Aromato.Api
             var connectionStr = Configuration.GetConnectionString("Aromato");
             var logTable = Configuration["LogsTable"];
 
+            IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
+            {
+                {"message", new RenderedMessageColumnWriter() },
+                {"message_template", new MessageTemplateColumnWriter() },
+                {"level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
+                {"raise_date", new TimeStampColumnWriter() },
+                {"exception", new ExceptionColumnWriter() },
+                {"properties", new PropertiesColumnWriter(NpgsqlDbType.Json) },
+                {"machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.Raw) }
+            };
+
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
-                .WriteTo.PostgreSqlServer(connectionStr, logTable)
+                .WriteTo.PostgreSQL(connectionStr, logTable, columnWriters, useCopy: false)
                 .WriteTo.LiterateConsole()
                 .CreateLogger();
+
+            Serilog.Debugging.SelfLog.Enable(Console.Error);
         }
 
         public IConfigurationRoot Configuration { get; }

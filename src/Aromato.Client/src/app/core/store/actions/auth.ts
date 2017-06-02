@@ -3,9 +3,9 @@ import { Action } from '@ngrx/store';
 export const AUTHENTICATE = '[Auth] Authenticate';
 export const AUTHENTICATE_SUCCESS = '[Auth] Authenticate Success';
 export const AUTHENTICATE_FAILURE = '[Auth] Authenticate Failure';
-export const AUTHORIZE = '[Auth] Authorize';
-export const AUTHORIZE_SUCCESS = '[Auth] Authorize Success';
-export const AUTHORIZE_FAILURE = '[Auth] Authorize Failure';
+export const LOAD_FROM_DB = '[Auth] Load Token from DB';
+export const LOAD_FROM_DB_SUCCESS = '[Auth] Load Token from DB Success';
+export const LOAD_FROM_DB_FAILURE = '[Auth] Load Token from DB Failure';
 export const LOGOUT = '[Auth] Logout';
 
 export class AuthenticateAction implements Action {
@@ -20,26 +20,25 @@ export class AuthenticateSuccessAction implements Action {
   constructor(public identityClaims: object, public accessToken: string) {}
 }
 
-export class AuthenticateFailureAction implements Action {
-  readonly type = AUTHENTICATE_FAILURE;
+export class LoadFromDatabaseAction implements Action {
+  readonly type = LOAD_FROM_DB;
+
+  constructor() {}
+}
+
+export class LoadFromDatabaseSuccessAction implements Action {
+  readonly type = LOAD_FROM_DB_SUCCESS;
+
+  constructor(public identityClaims: object, public accessToken: string) {}
+}
+
+export class LoadFromDatabaseFailureAction implements Action {
+  readonly type = LOAD_FROM_DB_FAILURE;
 
   constructor(public error: any) {}
 }
-
-export class AuthorizeAction implements Action {
-  readonly type = AUTHORIZE;
-
-  constructor(public username: string, public password: string, public scopes: string[]) {}
-}
-
-export class AuthorizeSuccessAction implements Action {
-  readonly type = AUTHORIZE_SUCCESS;
-
-  constructor(public accessToken: string) {}
-}
-
-export class AuthorizeFailureAction implements Action {
-  readonly type = AUTHORIZE_FAILURE;
+export class AuthenticateFailureAction implements Action {
+  readonly type = AUTHENTICATE_FAILURE;
 
   constructor(public error: any) {}
 }
@@ -52,8 +51,7 @@ export type Actions
   = AuthenticateAction
   | AuthenticateSuccessAction
   | AuthenticateFailureAction
-  | AuthorizeAction
-  | AuthorizeSuccessAction
-  | AuthorizeFailureAction
-  | LogoutAction;
-
+  | LogoutAction
+  | LoadFromDatabaseAction
+  | LoadFromDatabaseFailureAction
+  | LoadFromDatabaseSuccessAction;

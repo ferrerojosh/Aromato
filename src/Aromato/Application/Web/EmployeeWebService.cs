@@ -81,6 +81,6 @@ namespace Aromato.Application.Web
         {
             var employee = _employeeRepository.FindByUniqueId(uniqueId);
             return employee.AsData<EmployeeWebData>();
-        }
+        } 
     }
 }

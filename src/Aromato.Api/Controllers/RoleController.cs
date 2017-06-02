@@ -7,13 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aromato.Api.Controllers
 {
-    [Authorize]
     [Produces("application/json")]
     [Route("api/role")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
-
+        
         public RoleController(IRoleService roleService)
         {
             _roleService = roleService;
@@ -25,6 +24,12 @@ namespace Aromato.Api.Controllers
         {
             var subject = User.GetClaim(OpenIdConnectConstants.Claims.Subject);
             return _roleService.RetrieveRolesByUniqueId(subject);
+        }
+        
+        [HttpGet("{username}")]
+        public IEnumerable<IData> FindByName(string username)
+        {
+            return _roleService.RetrieveRolesByUsername(username);
         }
     }
 }

@@ -1,0 +1,23 @@
+app-navbar {
+  position: fixed; width: 100%;
+}
+
+md-sidenav-container {
+  top: 64px !important
+}
+
+md-sidenav {
+  min-width: 250px;
+}
+
+.flex-container {
+  margin: 1rem;
+  min-height: 76vh;
+}
+
+md-sidenav .nav-link {
+  min-width: inherit;
+  text-align: left;
+  display: block;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+}

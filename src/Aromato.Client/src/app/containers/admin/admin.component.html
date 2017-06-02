@@ -1,0 +1,19 @@
+<!-- navigation bar -->
+<app-navbar (sideNavButtonClick)="toggleSideNav()"></app-navbar>
+<md-sidenav-container fullscreen>
+  <md-sidenav #sidenav mode="side" [opened]="(isSideNavOpened$ | async)">
+    <!-- sidenav content -->
+    <a class="nav-link" role="button" md-button routerLink="/admin/inventory">
+      <md-icon>list</md-icon>
+      <span>Inventory</span>
+    </a>
+    <a class="nav-link" role="button" md-button routerLink="/admin/employee">
+      <md-icon>list</md-icon>
+      <span>Employee</span>
+    </a>
+  </md-sidenav>
+  <!-- primary content -->
+  <div class="flex-container">
+    <router-outlet></router-outlet>
+  </div>
+</md-sidenav-container>

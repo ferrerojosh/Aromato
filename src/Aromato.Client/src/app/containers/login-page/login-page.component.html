@@ -1,24 +1,58 @@
-<div class="login-container">
-  <md-card>
-    <md-toolbar color="primary">
-      <span>Aromato</span>
-    </md-toolbar>
-    <md-card-content *ngIf="!(isAuthenticated$ | async)">
-      <form novalidate [formGroup]="login">
-        <md-input-container class="form-control">
-          <input mdInput type="text" formControlName="username" placeholder="Username">
-        </md-input-container>
-        <md-input-container class="form-control">
-          <input mdInput type="password" formControlName="password" placeholder="Password">
-        </md-input-container>
-        <div class="form-control">
-          <button md-raised-button (click)="onSubmit()">Login</button>
-        </div>
-      </form>
-    </md-card-content>
-    <md-card-content *ngIf="(isAuthenticated$ | async)">
-      <app-authorize></app-authorize>
-    </md-card-content>
-  </md-card>
+<div class="flex-container">
+  <div fxLayout="row" fxLayoutAlign="center">
+    <md-card fxFlex="100%" fxFlex.xl="25%" fxFlex.sm="60%" fxFlex.md="40%" fxFlex.lg="30%">
+      <div *ngIf="!(areRolesLoaded$ | async)">
+        <md-card-title>Sign In</md-card-title>
+        <md-card-subtitle>to Aromato</md-card-subtitle>
+      </div>
+      <div *ngIf="(areRolesLoaded$ | async)">
+        <md-card-title>Welcome</md-card-title>
+        <md-card-subtitle>{{ loginForm.get('username').value }}</md-card-subtitle>
+      </div>
+      <md-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+          <div fxLayout="column">
+            <div *ngIf="!(areRolesLoaded$ | async) && !(areRolesLoading$ | async)">
+              <div>
+                <md-input-container fxFlex="100%">
+                  <input type="text" mdInput formControlName="username" placeholder="Username">
+                  <md-error>Username is required.</md-error>
+                </md-input-container>
+              </div>
+              <div>
+                <button class="link-button" md-button>Forgot username?</button>
+              </div>
+              <div class="login-actions">
+                <button class="login-button" (click)="checkRole()" color="primary" md-raised-button>Next</button>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center">
+              <md-spinner *ngIf="(areRolesLoading$ | async) || (isAuthLoading$ | async)"></md-spinner>
+            </div>
+            <div *ngIf="(areRolesLoaded$ | async) && !(isAuthLoading$ | async) && !(isAuthenticated$ | async)">
+              <div>
+                <md-select formControlName="selectedRole" fxFlex="100%" placeholder="Role">
+                  <md-option *ngFor="let role of roles$ | async" [value]="role">
+                    {{ role.name }}
+                  </md-option>
+                </md-select>
+              </div>
+              <div>
+                <md-input-container fxFlex="100%">
+                  <input type="password" mdInput formControlName="password" placeholder="Password">
+                  <md-error>Password must be at least 8 characters.</md-error>
+                </md-input-container>
+              </div>
+              <div class="error" *ngIf="(authError$ | async)">
+                <p>An error occured while logging you in.</p>
+              </div>
+              <div class="login-actions">
+                <button class="login-button" type="submit" color="primary" md-raised-button>Sign In</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </md-card-content>
+    </md-card>
+  </div>
 </div>
-

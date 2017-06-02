@@ -1,11 +1,44 @@
-md-toolbar {
-  padding: 0 4rem 0 4rem;
+@import '../../../scss/material';
+
+.login-button {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.error {
+  color: #ff5722;
 }
 
 md-card {
-  padding: 0;
+  padding: 2.5rem 2.5rem 6rem 2.5rem;
 }
 
-md-card-content, md-card-actions {
-  padding: 4rem;
+md-input-container {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media(max-width: 599px) {
+  md-card {
+    padding-bottom: 2.5rem;
+  }
+}
+
+.link-button {
+  color: lighten(map-get($dark-primary, default), 25%);
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.login-actions {
+  margin-top: 1rem;
+}
+
+.login-button {
+  float: right;
+}
+
+md-card-subtitle {
+  margin-bottom: 3rem;
 }

@@ -1,0 +1,15 @@
+<md-card>
+  <md-card-title>Welcome</md-card-title>
+  <md-card-subtitle>username</md-card-subtitle>
+  <md-card-content>
+    <div fxLayout="column">
+      <md-input-container fxFlex="100%">
+        <input type="password" mdInput placeholder="Password">
+        <md-error>Password must be at least 8 characters.</md-error>
+      </md-input-container>
+      <div class="login-actions">
+        <button class="login-button" (click)="checkRole()" color="primary" md-raised-button>Next</button>
+      </div>
+    </div>
+  </md-card-content>
+</md-card>

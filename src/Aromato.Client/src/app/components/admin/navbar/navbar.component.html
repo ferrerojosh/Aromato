@@ -1,0 +1,18 @@
+<md-toolbar>
+  <button md-icon-button (click)="openSideNav()">
+    <md-icon>menu</md-icon>
+  </button>
+  <button class="mr-auto" md-button>{{ title }}</button>
+  <md-menu #appMenu>
+    <button (click)="logout()" md-menu-item> Logout </button>
+    <button md-menu-item> Help </button>
+  </md-menu>
+
+  <button class="menu-button" md-icon-button [mdMenuTriggerFor]="appMenu">
+    <md-icon>more_vert</md-icon>
+  </button>
+</md-toolbar>
+
+
+
+

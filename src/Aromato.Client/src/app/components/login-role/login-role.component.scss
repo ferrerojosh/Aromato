@@ -1,0 +1,16 @@
+@import '../../../scss/material';
+
+.link-button {
+  color: lighten(map-get($dark-primary, default), 25%);
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.login-actions {
+  margin-top: 1rem;
+}
+
+.login-button {
+  float: right;
+}

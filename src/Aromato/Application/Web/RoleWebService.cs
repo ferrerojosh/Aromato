@@ -27,6 +27,11 @@ namespace Aromato.Application.Web
         public IEnumerable<IData> RetrieveRolesByUniqueId(string uniqueId)
         {
             return _roleRepository.FindBySpec(new RolesByUniqueId(uniqueId)).AsEnumerableData<RoleWebData>();
+        } 
+        
+        public IEnumerable<IData> RetrieveRolesByUsername(string username)
+        {
+            return _roleRepository.FindBySpec(new RolesByUsername(username)).AsEnumerableData<RoleWebData>();
         }
     }
 }
